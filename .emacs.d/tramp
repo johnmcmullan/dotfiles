@@ -1,0 +1,18 @@
+;; -*- emacs-lisp -*- <18/01/18 16:44:08 /home/john.mcmullan/.emacs.d/tramp>
+;; Tramp connection history.  Don't change this file.
+;; You can delete it, forcing Tramp to reapply the checks.
+
+((["scp" nil "10.201.1.81" nil nil]
+  nil)
+ (["scp" nil "10.201.1.82" nil nil]
+  nil)
+ (["scp" nil "ip-10-201-1-90.ec2.tbricks.com" nil nil]
+  nil)
+ (["scp" nil "10.201.1.87" nil nil]
+  nil)
+ (["scp" nil "10.201.1.90" nil nil]
+  nil)
+ (["scp" nil "stash.orcsoftware.com" nil nil]
+  nil)
+ (["scp" nil "plink" nil nil]
+  nil))
