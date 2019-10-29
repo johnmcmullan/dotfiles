@@ -55,12 +55,13 @@
   :custom
   (lsp-eldoc-render-all nil)
   (lsp-prefer-flymake nil)
+  (lsp-file-watch-threshold 2500)
   :commands
   lsp)
 
 (use-package flycheck
   :ensure t
-  :defer 2
+  :defer t
   :diminish
   :init
   (global-flycheck-mode)
@@ -71,7 +72,7 @@
     ;; Settings
     (setq-default flycheck-emacs-lisp-initialize-packages t
                   flycheck-highlighting-mode 'symbols
-                  flycheck-check-syntax-automatically '(save idle-change mode-enabled)))
+                  flycheck-check-syntax-automatically '(save)))
   (define-key flycheck-mode-map (kbd "M-n") 'flycheck-next-error)
   (define-key flycheck-mode-map (kbd "M-p") 'flycheck-previous-error))
 
@@ -107,11 +108,12 @@
   (company-lsp-enable-recompletion t))
 
 (use-package ccls
-  :defer
+  :defer t
+  :init
   (add-hook 'c-mode-common-hook (lambda () (require 'ccls) (lsp)))
   :custom
-  (ccls-executable "~/work/apps/.vscode/ccls")
-  (ccls-args '("--log-file=/tmp/ccls.log" "-v=1"))
+  (ccls-executable "~/work/apps/.vscode/ccls" "Fedor's ccls")
+  (ccls-args '("--log-file=/tmp/ccls.log"))
   (ccls-initialization-options
    '(:clang (:resourceDir "/opt/llvm-6.0/lib64/clang/6.0.1")))
   (ccls-sem-highlight-method nil))

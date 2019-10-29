@@ -13,9 +13,7 @@
 (autoload 'flycheck-irony-setup "flycheck-irony" "\
 Setup Flycheck Irony.
 
-Add `irony' to `flycheck-checkers'.
-
-\(fn)" t nil)
+Add `irony' to `flycheck-checkers'." t nil)
 
 (if (fboundp 'register-definition-prefixes) (register-definition-prefixes "flycheck-irony" '("flycheck-irony-")))
 

@@ -12,6 +12,11 @@
 (autoload 'irony-eldoc "irony-eldoc" "\
 Eldoc support in irony-mode.
 
+If called interactively, enable Irony-Eldoc mode if ARG is
+positive, and disable it if ARG is zero or negative.  If called
+from Lisp, also enable the mode if ARG is omitted or nil, and
+toggle it if ARG is `toggle'; disable the mode otherwise.
+
 eldoc is a built-in Emacs mode for displaying documentation about
 a symbol or function call at point in the message buffer (see
 `eldoc-mode').
