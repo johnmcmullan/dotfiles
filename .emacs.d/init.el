@@ -21,7 +21,7 @@
     ("zenburn" "9d91458c4ad7c74cf946bd97ad085c0f6a40c370ac0a1cbeb2e3879f15b40553" default)))
  '(package-selected-packages
    (quote
-    (flycheck-clangcheck use-package hl-todo magit lsp lsp-ui ccls company-lsp ag auto-complete auto-complete-clang c-eldoc clang-format company company-irony-c-headers company-irony fic-mode flycheck flycheck-irony irony irony-eldoc rtags company-rtags zenburn-theme fill-column-indicator ws-butler yasnippet))))
+    (gnu-elpa-keyring-update flycheck-clangcheck use-package hl-todo magit lsp lsp-ui ccls company-lsp ag auto-complete auto-complete-clang c-eldoc clang-format company company-irony-c-headers company-irony fic-mode flycheck flycheck-irony irony irony-eldoc rtags company-rtags zenburn-theme fill-column-indicator ws-butler yasnippet))))
 
 (package-install-selected-packages)
 
