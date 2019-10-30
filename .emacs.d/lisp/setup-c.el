@@ -49,10 +49,13 @@
 (require 'flycheck)
 
 (use-package lsp-mode
+  :init
+  (require 'lsp-clients)
   :config
   (define-key lsp-mode-map (kbd "M-.") 'lsp-find-definition)
   (define-key lsp-mode-map (kbd "M-,") 'lsp-find-references)
   :custom
+  (lsp-auto-guess-root t)
   (lsp-eldoc-render-all nil)
   (lsp-prefer-flymake nil)
   (lsp-file-watch-threshold 2500)
@@ -65,14 +68,15 @@
   :diminish
   :init
   (global-flycheck-mode)
+  :custom
+  (flycheck-display-errors-delay .3)
+  (flycheck-idle-change-delay 2.0)
   :config
-  (setq flycheck-display-errors-delay .3
-        flycheck-idle-change-delay 2.0)
   (progn
     ;; Settings
     (setq-default flycheck-emacs-lisp-initialize-packages t
                   flycheck-highlighting-mode 'symbols
-                  flycheck-check-syntax-automatically '(save)))
+                  flycheck-check-syntax-automatically '(save idle-update-delay)))
   (define-key flycheck-mode-map (kbd "M-n") 'flycheck-next-error)
   (define-key flycheck-mode-map (kbd "M-p") 'flycheck-previous-error))
 
