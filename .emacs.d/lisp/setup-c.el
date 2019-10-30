@@ -58,7 +58,7 @@
   (lsp-auto-guess-root t)
   (lsp-eldoc-render-all nil)
   (lsp-prefer-flymake nil)
-  (lsp-file-watch-threshold 2500)
+  (lsp-file-watch-threshold 40000)
   :commands
   lsp)
 
