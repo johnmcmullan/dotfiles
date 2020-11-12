@@ -34,9 +34,9 @@
                         (other . "gnu")))
 (add-hook 'c-mode-common-hook 'tbricks-c++-mode-hook)
 
-(use-package clang-format
-  :custom
-  (clang-format-style "file"))
+;(use-package clang-format
+;  :custom
+;  (clang-format-style "file"))
 
 ;; CCLS
 ;; ------------------------------------------------------------------
@@ -49,9 +49,9 @@
                  :custom
 ;                 (ccls-executable "~/bin/ccls" "ccls for llvm-9")
                  (ccls-args '("--log-file=/tmp/ccls.log"))
-                 (if (neq window-system 'ns)
+                 (if (not (eq window-system 'ns))
                      (ccls-initialization-options
-                      '(:clang (:resourceDir "/opt/llvm-9/lib64/clang/9.0.0"))))
+                      '(:clang (:resourceDir "/opt/llvm-10/lib64/clang/10.0.1"))))
                  ))
 
 (provide 'setup-c)

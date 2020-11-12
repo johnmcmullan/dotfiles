@@ -6,9 +6,9 @@
 ;; ------------------------------------------------------------------
 
 
-(require 'yasnippet) ; template arguments
-(require 'company-yasnippet)
-(require 'flycheck)
+;(require 'yasnippet) ; template arguments
+;(require 'company-yasnippet)
+;(require 'flycheck)
 
 (use-package flycheck
   :ensure t
@@ -71,9 +71,9 @@
 (use-package magit-todos
   :after (magit))
 
-(use-package hl-todo
-  :config
-  (global-hl-todo-mode +1))
+;(use-package hl-todo
+;  :config
+;  (global-hl-todo-mode +1))
 
 (provide 'setup-programming)
 ;;; setup-programming.el ends here
