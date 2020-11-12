@@ -78,7 +78,7 @@ export ADMIN_ROOT="$TBRICKS/admin"
 export SDK=$TBRICKS/sdk
 
 # clang++
-LLVM="/opt/llvm-6.0"
+LLVM="/opt/llvm-10"
 # g++
 GCC_SUITE="/opt/gcc-8.2.0"
 export GCC_SUITE LLVM
@@ -102,5 +102,5 @@ export MAKE=gmake
 #export https_proxy=$HTTPS_PROXY
 export CA_CERT_FILE=/etc/pki/tls/certs/ca-bundle.crt
 
-alias em='emacsclient --no-wait'
+alias em='emacsclient -nw'
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'

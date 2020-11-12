@@ -17,3 +17,6 @@ LD_LIBRARY_PATH=$LLVM/lib64:$GCC_SUITE/lib64:/opt/tibco/tibrv/8.4/lib
 export LD_LIBRARY_PATH
 
 tempo_log "login"
+
+test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash" || true
+
