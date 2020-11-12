@@ -8,7 +8,7 @@ fi
 # User specific environment and startup programs
 
 # PATH
-PATH=$HOME/bin:$LLVM/bin:$GCC_SUITE/bin:$ADMIN_ROOT/bin:/opt/maven/bin:/usr/share/centrifydc/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/tibco/tibrv/8.4/bin:/opt/puppetlabs/bin:$HOME/.emacs.d/rtags/bin:$HOME/.local/bin:
+PATH=$HOME/bin:$LLVM/bin:$GCC_SUITE/bin:$ADMIN_ROOT/bin:/opt/maven/bin:/usr/share/centrifydc/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/tibco/tibrv/8.4/bin:/opt/puppetlabs/bin:$HOME/.local/bin:
 
 export PATH
 
