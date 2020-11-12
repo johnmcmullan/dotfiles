@@ -12,5 +12,7 @@
 (global-set-key (kbd "C-x o") ' ff-find-other-file)
 (global-set-key (kbd "C-a") 'beginning-of-line-or-indentation)
 (global-set-key (kbd "C-c f") 'clang-format-region)
+(if (eq window-system 'ns)
+    (global-set-key (kbd "M-3") '(lambda () (interactive) (insert "#"))))
 
 (provide 'setup-editing)

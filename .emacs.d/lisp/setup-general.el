@@ -36,28 +36,31 @@
 ; auto-save in one place
 (setq auto-save-file-name-transforms
       '((".*" "~/.saves/" t)))
+; no lock files
+(setq create-lockfiles nil)
 
 ;; never any tabs, anywhere!!!!
 (setq-default indent-tabs-mode nil)
 
 ; Highlighting of FIXME and TODO et al
-(require 'fic-mode)
-(add-hook 'c-mode-common-hook 'fic-mode)
-(add-hook 'emacs-lisp-mode-hook 'fic-mode)
+;(require 'fic-mode)
+;(add-hook 'c-mode-common-hook 'fic-mode)
+;(add-hook 'emacs-lisp-mode-hook 'fic-mode)
 
 ;; remove trailing whitespace automatically
 (require 'ws-butler)
 
 ; https://www.emacswiki.org/emacs/EightyColumnRule
-(require 'fill-column-indicator)
-(add-hook 'c-mode-common-hook 'fci-mode)
-(setq fill-column 120)
+;(require 'fill-column-indicator)
+;(add-hook 'c-mode-common-hook 'fci-mode)
+;(setq fill-column 120)
 
 (defun set-newline-and-indent ()
   (local-set-key (kbd "RET") 'newline-and-indent))
 (add-hook 'c-mode-common-hook 'set-newline-and-indent)
 (add-hook 'lisp-mode-hook 'set-newline-and-indent)
 (add-hook 'ruby-mode-hook 'set-newline-and-indent)
+(add-hook 'python-mode-hook 'set-newline-and-indent)
 
 (defun beginning-of-line-or-indentation ()
   "move to beginning of line, or indentation"
@@ -67,6 +70,6 @@
     (beginning-of-line)))
 
 ;; ZENBURN theme
-(load-theme 'zenburn t)
+;(load-theme 'zenburn t)
 
 (provide 'setup-general)
