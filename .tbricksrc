@@ -1,4 +1,4 @@
-# .tbricksrc
+# -*- mode: sh -*-
 
 function prompt()
 {
