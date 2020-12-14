@@ -18,8 +18,8 @@
 (require 'setup-general)
 (require 'setup-editing)
 (require 'setup-lisp)
-(require 'setup-programming)
 (require 'setup-c)
+(require 'setup-programming)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
