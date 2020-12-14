@@ -52,6 +52,15 @@ function setsdk()
     fi
 }
 
+function bearapp()
+{
+    BEAR=`which bear`
+    touch .ccls
+    make clean
+    rm -rf .ccls-cache
+    $BEAR make -j5 RECURSIVE=YES
+}
+
 function recompute_manpath()
 {
     MANPATH=/usr/share/man:/usr/local/share/man:/usr/share/locale/man:
