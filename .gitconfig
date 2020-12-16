@@ -1,0 +1,13 @@
+[core]
+	excludesfile = ~/.gitignore
+[user]
+	name = John McMullan
+	email = John.McMullan@itiviti.com
+[alias]
+	up = !git pull && git submodule update --init
+	sw = "!git_switch() { git checkout \"$@\" && git submodule update --init; }; git_switch"
+        
+[color]
+	diff = always
+#[diff]
+#	wordRegex = [A-Za-z0-9_]+|[^A-Za-z0-9_]
