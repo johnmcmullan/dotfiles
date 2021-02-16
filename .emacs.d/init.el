@@ -24,7 +24,7 @@
 
 '(package-selected-packages
    (quote
-    (modern-cpp-font-lock yasnippet-snippets yasnippet company which-key magit magit-todos gnu-elpa-keyring-update lsp-mode lsp-ui ccls flycheck)))
+    (modern-cpp-font-lock yasnippet-snippets yasnippet company which-key magit magit-todos gnu-elpa-keyring-update lsp-mode lsp-ui ccls flycheck zenburn-theme pyvenv elpy)))
  
 (package-install-selected-packages)
 
