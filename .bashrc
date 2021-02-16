@@ -20,7 +20,7 @@ fi
 #export HTTPS_PROXY=http://proxy.orcsoftware.com:3128
 #export http_proxy=$HTTP_PROXY
 #export https_proxy=$HTTPS_PROXY
-export CA_CERT_FILE=/etc/pki/tls/certs/ca-bundle.crt
+#export CA_CERT_FILE=/etc/pki/ca-bundle.crt
 
 alias em='emacsclient -nw'
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'

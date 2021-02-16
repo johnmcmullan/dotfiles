@@ -12,20 +12,21 @@
              '("linux"
                (c-basic-offset . 4)
                (c . c-lineup-streamop)
-;               (c-offsets-alist . (
-;                                   (c . c-lineup-C-comments)
-;                                   (statement-case-open . 0)
-;                                   (case-label . +)
-;                                   (substatement-open . +)
-;				   ))
-               ))
+               (c-offsets-alist . (
+                                   (innamespace . [0])
+                                   (c . c-lineup-C-comments)
+                                   (statement-case-open . 0)
+                                   (case-label . +)
+                                   (substatement-open . 0)
+				   ))
+             ))
 
 (defun tbricks-c++-mode-hook () "Set up C++ mode for Tbricks."
   (c-set-style "tbricks")
-  (c-set-offset 'innamespace 0)
   (setq indent-tabs-mode nil)
   (setq tab-width 4)
-  (setq whitespace-style '(trailing tabs tab-mark)))
+;  (setq whitespace-style '(trailing tabs tab-mark))
+        )
 
 (setq c-default-style '((java-mode . "java")
                         (awk-mode . "awk")
@@ -33,6 +34,8 @@
 			(c-mode . "tbricks")
                         (other . "gnu")))
 (add-hook 'c-mode-common-hook 'tbricks-c++-mode-hook)
+(add-hook 'c++-mode-hook #'modern-c++-font-lock-mode)
+(add-hook 'c-mode-common-hook #'yas-minor-mode)
 
 ;(use-package clang-format
 ;  :custom
@@ -49,10 +52,9 @@
                  :custom
 ;                 (ccls-executable "~/bin/ccls" "ccls for llvm-9")
                  (ccls-args '("--log-file=/tmp/ccls.log"))
-                 (if (not (eq window-system 'ns))
-                     (ccls-initialization-options
-                      '(:clang (:resourceDir "/opt/llvm-10/lib64/clang/10.0.1"))))
-                 ))
+                 (ccls-initialization-options
+                  '(:clang (:resourceDir "/opt/llvm-10/lib64/clang/10.0.1"))))
+  )
 
 (provide 'setup-c)
 ;;; setup-c.el ends here

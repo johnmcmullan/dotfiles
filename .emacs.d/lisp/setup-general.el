@@ -55,13 +55,7 @@
 ;(add-hook 'c-mode-common-hook 'fci-mode)
 ;(setq fill-column 120)
 
-(defun set-newline-and-indent ()
-  (local-set-key (kbd "RET") 'newline-and-indent))
-(add-hook 'c-mode-common-hook 'set-newline-and-indent)
-(add-hook 'lisp-mode-hook 'set-newline-and-indent)
-(add-hook 'ruby-mode-hook 'set-newline-and-indent)
-(add-hook 'python-mode-hook 'set-newline-and-indent)
-
+; for C-a
 (defun beginning-of-line-or-indentation ()
   "move to beginning of line, or indentation"
   (interactive)

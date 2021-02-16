@@ -5,11 +5,6 @@
 
 ;; ------------------------------------------------------------------
 
-
-;(require 'yasnippet) ; template arguments
-;(require 'company-yasnippet)
-;(require 'flycheck)
-
 (use-package flycheck
   :ensure t
   :defer t
@@ -28,16 +23,33 @@
   (define-key flycheck-mode-map (kbd "M-n") 'flycheck-next-error)
   (define-key flycheck-mode-map (kbd "M-p") 'flycheck-previous-error))
 
+(use-package lsp-mode
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook ((c-mode . lsp)
+         (python-mode .lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :config
+;  (setq lsp-prefer-flymake nil)
+  :commands lsp)
+
 (use-package lsp-ui
   :requires lsp-mode flycheck
   :config
   (setq lsp-ui-doc-include-signature nil  ; don't include type signature in the child frame
-        lsp-ui-sideline-show-symbol nil  ; don't show symbol on the right of info
-        lsp-ui-doc-enable nil
-        lsp-ui-sideline-enable nil)
+;        lsp-ui-sideline-show-symbol nil  ; don't show symbol on the right of info
+;        lsp-ui-doc-enable nil
+;        lsp-enable-links nil
+;        lsp-ui-sideline-enable nil
+        )
   (define-key lsp-ui-mode-map [f10] 'lsp-ui-sideline-toggle-symbols-info) ; F10 to toggle documentation
+
   :commands
   lsp-ui-mode)
+
+(use-package yasnippet)
 
 (use-package company
   :init
@@ -45,17 +57,6 @@
   :config
   (setq company-tooltip-align-annotations t
         company-minimum-prefix-length 1))
-
-(use-package company-lsp
-  :requires company
-  :commands
-  company-lsp
-  :config
-  (push 'company-lsp company-backends)
-  :custom
-  (company-lsp-async t)
-  (company-lsp-cache-candidates 'auto)
-  (company-lsp-enable-recompletion t))
 
 (use-package emacs-lisp
              :ensure nil

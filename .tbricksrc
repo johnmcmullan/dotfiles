@@ -34,7 +34,7 @@ function make()
 function setsdk()
 {
     VERSION=$1
-    SELECTED_COUNT=`ls -ald $TBRICKS/*sdk-*$VERSION | wc -l`
+    SELECTED_COUNT=`ls -ald $TBRICKS/*sdk-*$VERSION-* | wc -l`
     if [ -z "$SELECTED_COUNT" ]; then
         echo "No sdk version: $VERSION"
         return
@@ -42,9 +42,11 @@ function setsdk()
         echo "$VERSION is ambiguous when selecting sdk"
         return
     else
-        export SDK=`eval echo "$TBRICKS/*sdk-*$VERSION"`
-        rm -f $TBRICKS/sdk
-        ln -s $SDK $TBRICKS/sdk
+        export SDK=`eval echo "$TBRICKS/*sdk-*$VERSION-*"`
+        if [ -L $TBRICKS/sdk ] ; then
+            rm -f $TBRICKS/sdk
+            ln -s $SDK $TBRICKS/sdk
+        fi
         rm -rf $TB_APPS/.ccls-cache
 #        find $TB_APPS -name compile_commands.json -exec rm '{}' \;
         recompute_manpath
@@ -72,11 +74,16 @@ function recompute_manpath()
 export PROMPT_COMMAND=prompt
 export PS1='\[\e[1;32m\]\h:\W\[\e[m\]$ '
 
-export TBRICKS="$HOME/tbricks"
-export TBRICKS_ADMIN_CENTER=john.mcmullan_system
-export TBRICKS_ROOT=$TBRICKS
-export ADMIN_ROOT="$TBRICKS/admin"
-export SDK=$TBRICKS/sdk
+LOCAL_TBSH=$HOME/.local_tbsh
+if [ -f $LOCAL_TBSH ] ; then
+    source $LOCAL_TBSH
+else
+    export TBRICKS="/opt/tbricks"
+    export TBRICKS_ADMIN_CENTER=john.mcmullan_system
+    export TBRICKS_ROOT=$TBRICKS
+    export ADMIN_ROOT="$TBRICKS/admin"
+    export SDK=$TBRICKS/sdk
+fi
 
 # clang++
 LLVM="/opt/llvm-10"
@@ -91,4 +98,5 @@ if [ -f ${ADMIN_ROOT}/etc/bash/.tbricks_completion.bash ] ; then
 fi
 
 export TB_APPS=$HOME/work/apps
+export MK_SRCROOT=$HOME/work/apps
 export MAKE=gmake
