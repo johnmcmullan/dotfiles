@@ -25,8 +25,7 @@
   (c-set-style "tbricks")
   (setq indent-tabs-mode nil)
   (setq tab-width 4)
-;  (setq whitespace-style '(trailing tabs tab-mark))
-        )
+  )
 
 (setq c-default-style '((java-mode . "java")
                         (awk-mode . "awk")
@@ -51,7 +50,7 @@
                  (add-hook 'c-mode-common-hook (lambda () (require 'ccls) (lsp)))
                  :custom
 ;                 (ccls-executable "~/bin/ccls" "ccls for llvm-9")
-                 (ccls-args '("--log-file=/tmp/ccls.log"))
+                 (ccls-args '("--log-file=/home/john.mcmullan/tmp/ccls.log"))
                  (ccls-initialization-options
                   '(:clang (:resourceDir "/opt/llvm-10/lib64/clang/10.0.1"))))
   )

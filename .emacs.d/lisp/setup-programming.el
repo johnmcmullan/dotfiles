@@ -24,36 +24,28 @@
   (define-key flycheck-mode-map (kbd "M-p") 'flycheck-previous-error))
 
 (use-package lsp-mode
-  :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  (setq lsp-keymap-prefix "C-c l")
-  :hook ((c-mode . lsp)
-         (python-mode .lsp)
-         ;; if you want which-key integration
-         (lsp-mode . lsp-enable-which-key-integration))
-  :config
-;  (setq lsp-prefer-flymake nil)
-  :commands lsp)
+  :commands lsp
+  :custom
+;  (lsp-auto-guess-root t)
+;  (lsp-enable-file-watchers nil)
+  (lsp-prefer-flymake nil)
+  :ensure t)
 
 (use-package lsp-ui
-  :requires lsp-mode flycheck
-  :config
-  (setq lsp-ui-doc-include-signature nil  ; don't include type signature in the child frame
-;        lsp-ui-sideline-show-symbol nil  ; don't show symbol on the right of info
-;        lsp-ui-doc-enable nil
-;        lsp-enable-links nil
-;        lsp-ui-sideline-enable nil
-        )
-  (define-key lsp-ui-mode-map [f10] 'lsp-ui-sideline-toggle-symbols-info) ; F10 to toggle documentation
+  :commands lsp-ui-mode
+  :ensure t)
 
-  :commands
-  lsp-ui-mode)
+(use-package company-lsp
+  :ensure t
+  :commands company-lsp
+  :config (push 'company-lsp company-backends))
 
 (use-package yasnippet)
 
 (use-package company
-  :init
-  (add-hook 'prog-mode-hook 'company-mode)
+  :hook
+  ((nxml-mode . company-mode)
+   (prog-mode . company-mode))
   :config
   (setq company-tooltip-align-annotations t
         company-minimum-prefix-length 1))

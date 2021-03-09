@@ -57,10 +57,46 @@ function setsdk()
 function bearapp()
 {
     BEAR=`which bear`
+    NPROC=`nproc`
     touch .ccls
     make clean
     rm -rf .ccls-cache
-    $BEAR make -j5 RECURSIVE=YES
+    name $BEAR make -j$NPROC RECURSIVE=YES
+}
+
+function makedb()
+{
+    cat > .ccls <<EOF
+${LLVM}/bin/clang++
+%h -x
+%h c++-header
+-isystem${SDK}/include64
+-I${TB_APPS}
+-DLINUX
+-DLINUX64
+-DU_USING_ICU_NAMESPACE=0
+-DLUA_LIB=\"tbricks_lua\"
+-DLUAJIT_LIB=\"luajit\"
+-DTB_USE_RCU
+-DURCU_INLINE_SMALL_FUNCTIONS
+-DFMT_SHARED
+-DNDEBUG
+-D_POSIX_PTHREAD_SEMANTICS
+-fPIC
+-D_GNU_SOURCE
+-D_GLIBCXX_USE_CXX11_ABI=0
+-m64
+--gcc-toolchain=/opt/gcc-8.2.0
+-flto=full
+-fclang-abi-compat=6.0
+-std=gnu++17
+-D_GLIBCXX_DEPRECATED=
+-pipe
+-pthread
+-march=core2
+-mtune=corei7
+-Qunused-arguments
+EOF
 }
 
 function recompute_manpath()
