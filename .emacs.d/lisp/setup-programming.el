@@ -9,8 +9,6 @@
   :ensure t
   :defer t
   :diminish
-  :init
-  (global-flycheck-mode)
   :custom
   (flycheck-display-errors-delay .3)
   (flycheck-idle-change-delay 2.0)
@@ -19,7 +17,7 @@
     ;; Settings
     (setq-default flycheck-emacs-lisp-initialize-packages t
                   flycheck-highlighting-mode 'symbols
-                  flycheck-check-syntax-automatically '(save idle-update-delay)))
+                  flycheck-check-syntax-automatically '(save idle-change)))
   (define-key flycheck-mode-map (kbd "M-n") 'flycheck-next-error)
   (define-key flycheck-mode-map (kbd "M-p") 'flycheck-previous-error))
 
@@ -34,11 +32,6 @@
 (use-package lsp-ui
   :commands lsp-ui-mode
   :ensure t)
-
-(use-package company-lsp
-  :ensure t
-  :commands company-lsp
-  :config (push 'company-lsp company-backends))
 
 (use-package yasnippet)
 
