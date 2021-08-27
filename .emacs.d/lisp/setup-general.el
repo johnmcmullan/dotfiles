@@ -20,6 +20,9 @@
   (setq mouse-sel-mode t)
 )
 
+(require 'pbcopy)
+(turn-on-pbcopy)
+
 (setq inhibit-startup-message t)
 (setq inhibit-startup-echo-area-message "john.mcmullan")
 

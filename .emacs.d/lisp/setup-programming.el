@@ -64,6 +64,12 @@
 (use-package magit-todos
   :after (magit))
 
+(use-package robe
+  :config
+  (push 'company-robe company-backends)
+  :hook
+  ((ruby-mode . robe-mode)))
+
 ;(use-package hl-todo
 ;  :config
 ;  (global-hl-todo-mode +1))
