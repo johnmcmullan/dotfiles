@@ -34,7 +34,7 @@ function make()
 function setsdk()
 {
     VERSION=$1
-    SELECTED_COUNT=`ls -ald $TBRICKS/*sdk-*$VERSION-* | wc -l`
+    SELECTED_COUNT=`ls -ald $TBRICKS/*sdk-*$VERSION* | wc -l`
     if [ -z "$SELECTED_COUNT" ]; then
         echo "No sdk version: $VERSION"
         return
@@ -42,7 +42,7 @@ function setsdk()
         echo "$VERSION is ambiguous when selecting sdk"
         return
     else
-        export SDK=`eval echo "$TBRICKS/*sdk-*$VERSION-*"`
+        export SDK=`eval echo "$TBRICKS/*sdk-*$VERSION*"`
         if [ -L $TBRICKS/sdk ] ; then
             rm -f $TBRICKS/sdk
             ln -s $SDK $TBRICKS/sdk
@@ -52,6 +52,15 @@ function setsdk()
         recompute_manpath
         echo "SDK is $SDK"
     fi
+}
+
+function create_user()
+{
+    SYSTEM=$1
+    USER=`id -un`
+    tbuser create ${USER} ${SYSTEM}
+    tbuser set roles=Unrestricted ${USER} ${SYSTEM}
+    tbuser set password= ${USER} ${SYSTEM}
 }
 
 function bearapp()
@@ -115,7 +124,7 @@ if [ -f $LOCAL_TBSH ] ; then
     source $LOCAL_TBSH
 else
     export TBRICKS="/opt/tbricks"
-    export TBRICKS_ADMIN_CENTER=john.mcmullan_system
+    export TBRICKS_ADMIN_CENTER=dev_jmm_admin_sys
     export TBRICKS_ROOT=$TBRICKS
     export ADMIN_ROOT="$TBRICKS/admin"
     export SDK=$TBRICKS/sdk
@@ -136,3 +145,6 @@ fi
 export TB_APPS=$HOME/work/apps
 export MK_SRCROOT=$HOME/work/apps
 export MAKE=gmake
+export CLANG_TIDY_CHECKS='-*,performance-no-automatic-move,performance-move-const-arg,performance-inefficient-vector-operation,bugprone-unused-raii,bugprone-use-after-move,bugprone-bool-pointer-implicit-conversion,performance-implicit-conversion-in-loop,readability-implicit-bool-conversion,bugprone-misplaced-widening-cast,bugprone-move-forwarding-reference,bugprone-bool-pointer-implicit-conversion,bugprone-string-constructor,bugprone-string-integer-assignment'
+ 
+export CLANG_TIDY_ARGS="--quiet --config=\"{Checks: '*', CheckOptions: [{key: readability-implicit-bool-conversion.AllowIntegerConditions, value: 1}, {key: readability-implicit-bool-conversion.AllowPointerConditions, value: 1}, {key: performance-move-const-arg.CheckTriviallyCopyableMove, value: 0}]}\""
