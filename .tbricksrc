@@ -95,7 +95,7 @@ ${LLVM}/bin/clang++
 -D_GNU_SOURCE
 -D_GLIBCXX_USE_CXX11_ABI=0
 -m64
---gcc-toolchain=/opt/gcc-8.2.0
+--gcc-toolchain=$GCC_SUITE
 -flto=full
 -fclang-abi-compat=6.0
 -std=gnu++17

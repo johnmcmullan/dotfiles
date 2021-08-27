@@ -51,7 +51,7 @@
 ;(add-hook 'emacs-lisp-mode-hook 'fic-mode)
 
 ;; remove trailing whitespace automatically
-(require 'ws-butler)
+;(require 'ws-butler)
 
 ; https://www.emacswiki.org/emacs/EightyColumnRule
 ;(require 'fill-column-indicator)
@@ -66,7 +66,5 @@
       (back-to-indentation)
     (beginning-of-line)))
 
-;; ZENBURN theme
-;(load-theme 'zenburn t)
-
 (provide 'setup-general)
+;;; setup-general ends here
