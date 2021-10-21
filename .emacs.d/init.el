@@ -34,7 +34,7 @@
  '(custom-safe-themes
    '("e6df46d5085fde0ad56a46ef69ebb388193080cc9819e2d6024c9c6e27388ba9" "9d91458c4ad7c74cf946bd97ad085c0f6a40c370ac0a1cbeb2e3879f15b40553" "f2c35f8562f6a1e5b3f4c543d5ff8f24100fae1da29aeb1864bbc17758f52b70" default))
  '(package-selected-packages
-   '(pbcopy robe projectile which-key company-prescient yasnippet-snippets modern-cpp-font-lock yasnippet lsp-mode company-lsp lsp-treemacs lsp-ui zenburn-theme ccls magit-todos magit clang-format hl-todo pyvenv ws-butler docbook)))
+   '(lsp-java pbcopy robe projectile which-key company-prescient yasnippet-snippets modern-cpp-font-lock yasnippet lsp-mode company-lsp lsp-treemacs lsp-ui zenburn-theme ccls magit-todos magit clang-format hl-todo pyvenv ws-butler docbook)))
 
 (package-install-selected-packages)
 
