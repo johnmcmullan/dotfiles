@@ -30,6 +30,8 @@
   :ensure t)
 
 (use-package lsp-ui
+  :config
+  (setq lsp-lens-enable nil)
   :commands lsp-ui-mode
   :ensure t)
 
