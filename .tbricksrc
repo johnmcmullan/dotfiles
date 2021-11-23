@@ -31,56 +31,16 @@ function make()
     /bin/make "$@"
 }
 
-function setsdk()
-{
-    VERSION=$1
-    SELECTED_COUNT=`ls -ald $TBRICKS/*sdk-*$VERSION* | wc -l`
-    if [ -z "$SELECTED_COUNT" ]; then
-        echo "No sdk version: $VERSION"
-        return
-    elif [ $SELECTED_COUNT != "1" ]; then
-        echo "$VERSION is ambiguous when selecting sdk"
-        return
-    else
-        export SDK=`eval echo "$TBRICKS/*sdk-*$VERSION*"`
-        if [ -L $TBRICKS/sdk ] ; then
-            rm -f $TBRICKS/sdk
-            ln -s $SDK $TBRICKS/sdk
-        fi
-        rm -rf $TB_APPS/.ccls-cache
-#        find $TB_APPS -name compile_commands.json -exec rm '{}' \;
-        recompute_manpath
-        echo "SDK is $SDK"
-    fi
-}
-
-function create_user()
-{
-    SYSTEM=$1
-    USER=`id -un`
-    tbuser create ${USER} ${SYSTEM}
-    tbuser set roles=Unrestricted ${USER} ${SYSTEM}
-    tbuser set password= ${USER} ${SYSTEM}
-}
-
-function bearapp()
-{
-    BEAR=`which bear`
-    NPROC=`nproc`
-    touch .ccls
-    make clean
-    rm -rf .ccls-cache
-    name $BEAR make -j$NPROC RECURSIVE=YES
-}
-
 function makedb()
 {
-    cat > .ccls <<EOF
+    DBPATH=${1:-.}
+    DBFILE=$DBPATH/.ccls
+    cat > $DBFILE <<EOF
 ${LLVM}/bin/clang++
 %h -x
 %h c++-header
--isystem${SDK}/include64
--I${TB_APPS}
+-isystem$(realpath $SDK)/include64
+-I$(realpath $TB_APPS)
 -DLINUX
 -DLINUX64
 -DU_USING_ICU_NAMESPACE=0
@@ -106,6 +66,54 @@ ${LLVM}/bin/clang++
 -mtune=corei7
 -Qunused-arguments
 EOF
+    rm -rf $DBPATH/.ccls-cache
+
+    for MAKEFILE in `find $DBPATH -name GNUmakefile` ; do
+        grep FLAGS $MAKEFILE | egrep -v '^#'| awk '{print $3}'
+    done | sort -u >> $DBFILE
+}
+
+function setsdk()
+{
+    VERSION=$1
+    SELECTED_COUNT=`ls -ald $TBRICKS/*sdk-*$VERSION* | wc -l`
+    if [ -z "$SELECTED_COUNT" ]; then
+        echo "No sdk version: $VERSION"
+        return
+    elif [ $SELECTED_COUNT != "1" ]; then
+        echo "$VERSION is ambiguous when selecting sdk"
+        return
+    else
+        export SDK=`eval echo "$TBRICKS/*sdk-$VERSION*"`
+        if [ -L $TBRICKS/sdk ] ; then
+            rm -f $TBRICKS/sdk
+            ln -s $SDK $TBRICKS/sdk
+            export SDK=$TBRICKS/sdk
+        fi
+        rm -rf $TB_APPS/.ccls-cache
+        makedb $TB_APPS
+        recompute_manpath
+        echo "SDK is `realpath $SDK`"
+    fi
+}
+
+function create_user()
+{
+    SYSTEM=$1
+    USER=`id -un`
+    tbuser create ${USER} ${SYSTEM}
+    tbuser set roles=Unrestricted ${USER} ${SYSTEM}
+    tbuser set password= ${USER} ${SYSTEM}
+}
+
+function bearapp()
+{
+    BEAR=`which bear`
+    NPROC=`nproc`
+    touch .ccls
+    make clean
+    rm -rf .ccls-cache
+    name $BEAR make -j$NPROC RECURSIVE=YES
 }
 
 function recompute_manpath()
@@ -127,7 +135,6 @@ else
     export TBRICKS_ADMIN_CENTER=dev_jmm_admin_sys
     export TBRICKS_ROOT=$TBRICKS
     export ADMIN_ROOT="$TBRICKS/admin"
-    export SDK=$TBRICKS/sdk
 fi
 
 # clang++
@@ -145,6 +152,8 @@ fi
 export TB_APPS=$HOME/work/apps
 export MK_SRCROOT=$HOME/work/apps
 export MAKE=gmake
+: "${SDK:=$TBRICKS/sdk}"
+export SDK
 export CLANG_TIDY_CHECKS='-*,performance-no-automatic-move,performance-move-const-arg,performance-inefficient-vector-operation,bugprone-unused-raii,bugprone-use-after-move,bugprone-bool-pointer-implicit-conversion,performance-implicit-conversion-in-loop,readability-implicit-bool-conversion,bugprone-misplaced-widening-cast,bugprone-move-forwarding-reference,bugprone-bool-pointer-implicit-conversion,bugprone-string-constructor,bugprone-string-integer-assignment'
  
 export CLANG_TIDY_ARGS="--quiet --config=\"{Checks: '*', CheckOptions: [{key: readability-implicit-bool-conversion.AllowIntegerConditions, value: 1}, {key: readability-implicit-bool-conversion.AllowPointerConditions, value: 1}, {key: performance-move-const-arg.CheckTriviallyCopyableMove, value: 0}]}\""
