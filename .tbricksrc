@@ -96,8 +96,8 @@ function setsdk()
             ln -s $SDK $TBRICKS/sdk
             export SDK=$TBRICKS/sdk
         fi
-        rm -rf $TB_APPS/.ccls-cache
-        makedb $TB_APPS
+#        rm -rf $TB_APPS/.ccls-cache
+#        makedb $TB_APPS
         recompute_manpath
         echo "SDK is `realpath $SDK`"
     fi
