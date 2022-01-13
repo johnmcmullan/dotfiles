@@ -70,7 +70,13 @@ EOF
 
     for MAKEFILE in `find $DBPATH -name GNUmakefile` ; do
         grep FLAGS $MAKEFILE | egrep -v '^#'| awk '{print $3}'
+        grep HEADERS $MAKEFILE | egrep -v '^#' | awk '{printf("-I%s\n", $3)}'
     done | sort -u >> $DBFILE
+}
+
+function code-tidy()
+{
+    ${LLVM}/share/clang/run-clang-tidy.py -j4 -fix  -style file -header-filter='^((?!(.*\/shared\/.*)).)*$' -clang-tidy-binary ${LLVM}/bin/clang-tidy -clang-apply-replacements-binary ${LLVM}/bin/clang-apply-replacements
 }
 
 function setsdk()
