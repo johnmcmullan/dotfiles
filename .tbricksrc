@@ -69,7 +69,7 @@ EOF
     rm -rf $DBPATH/.ccls-cache
 
     for MAKEFILE in `find $DBPATH -name GNUmakefile` ; do
-        grep FLAGS $MAKEFILE | egrep -v '^#'| awk '{print $3}'
+        grep FLAGS $MAKEFILE | egrep -v '^#'| awk '{printf("%s\n", $3)}'
         grep HEADERS $MAKEFILE | egrep -v '^#' | awk '{printf("-I%s\n", $3)}'
     done | sort -u >> $DBFILE
 }
