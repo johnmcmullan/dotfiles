@@ -35,6 +35,7 @@
 (add-hook 'c-mode-common-hook 'tbricks-c++-mode-hook)
 (add-hook 'c++-mode-hook #'modern-c++-font-lock-mode)
 (add-hook 'c-mode-common-hook #'yas-minor-mode)
+(add-hook 'c-mode-common-hook #'company-mode)
 
 ;(use-package clang-format
 ;  :custom
@@ -43,17 +44,16 @@
 ;; CCLS
 ;; ------------------------------------------------------------------
 
-(if (executable-find "ccls")
-    (use-package ccls
-                 :defer t
-                 :init
-                 (add-hook 'c-mode-common-hook (lambda () (require 'ccls) (lsp)))
-                 :custom
-;                 (ccls-executable "~/bin/ccls" "ccls for llvm-9")
-                 (ccls-args '("--log-file=/home/john.mcmullan/tmp/ccls.log"))
-                 (ccls-initialization-options
-                  '(:clang (:resourceDir "/opt/llvm-10/lib64/clang/10.0.1"))))
-  )
+;(if (executable-find "ccls")
+;    (use-package ccls
+;                 :defer t
+;                 :init
+;                 (add-hook 'c-mode-common-hook (lambda () (require 'ccls) (lsp)))
+;                 :custom
+;                 (ccls-args '("--log-file=/home/john.mcmullan/tmp/ccls.log"))
+;                 (ccls-initialization-options
+;                  '(:clang (:resourceDir "/opt/llvm-10/lib64/clang/10.0.1"))))
+;  )
 
 (provide 'setup-c)
 ;;; setup-c.el ends here

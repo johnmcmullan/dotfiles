@@ -27,6 +27,7 @@
 ;  (lsp-auto-guess-root t)
 ;  (lsp-enable-file-watchers nil)
   (lsp-prefer-flymake nil)
+  :hook (c-mode-common . lsp)
   :ensure t)
 
 (use-package lsp-ui
