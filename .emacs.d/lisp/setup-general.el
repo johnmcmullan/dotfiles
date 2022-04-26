@@ -43,7 +43,7 @@
 (setq create-lockfiles nil)
 
 ;; never any tabs, anywhere!!!!
-(setq-default indent-tabs-mode nil)
+;(setq-default indent-tabs-mode nil)
 
 ; Highlighting of FIXME and TODO et al
 ;(require 'fic-mode)

@@ -5,6 +5,11 @@
 
 ;; ------------------------------------------------------------------
 
+;; never any tabs, anywhere!!!!
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+
+
 (use-package flycheck
   :ensure t
   :defer t
