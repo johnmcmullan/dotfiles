@@ -50,9 +50,9 @@ function setsdk()
         export SDK=`eval echo "$TBRICKS/*sdk-$VERSION*"`
         if [ -L $TBRICKS/sdk ] ; then
             rm -f $TBRICKS/sdk
-            ln -s $SDK $TBRICKS/sdk
-            export SDK=$TBRICKS/sdk
         fi
+        ln -s $SDK $TBRICKS/sdk
+        export SDK=$TBRICKS/sdk
 #        rm -rf $TB_APPS/.ccls-cache
 #        makedb $TB_APPS
         recompute_manpath
