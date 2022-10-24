@@ -10,6 +10,18 @@
 (setq-default tab-width 4)
 
 
+(use-package yasnippet)
+
+(use-package company
+  :hook
+  ((nxml-mode . company-mode)
+   (prog-mode . company-mode))
+  :custom
+  (company-backends '(company-capf))
+  (company-tooltip-align-annotations t)
+  (company-idle-delay 0.0)
+  (company-minimum-prefix-length 1))
+
 (use-package flycheck
   :ensure t
   :defer t
@@ -23,33 +35,27 @@
     (setq-default flycheck-emacs-lisp-initialize-packages t
                   flycheck-highlighting-mode 'symbols
                   flycheck-check-syntax-automatically '(save idle-change)))
-  (define-key flycheck-mode-map (kbd "M-n") 'flycheck-next-error)
-  (define-key flycheck-mode-map (kbd "M-p") 'flycheck-previous-error))
+  :bind
+  ("M-n" . flycheck-next-error)
+  ("M-p" . flycheck-previous-error))
 
 (use-package lsp-mode
-  :commands lsp
+  :ensure t
+  :hook (c-mode-common . lsp-deferred)
   :custom
-;  (lsp-auto-guess-root t)
-;  (lsp-enable-file-watchers nil)
+  (lsp-idle-delay 0.1)
+  (lsp-clients-clangd-args
+   (list "--clang-tidy" "--header-insertion-decorators=0" (substitute-env-vars "--compile-commands-dir=${TB_APPS}")))
   (lsp-prefer-flymake nil)
-  :hook (c-mode-common . lsp)
-  :ensure t)
+  (lsp-prefer-capf t)
+  (lsp-auto-guess-root t)
+  (lsp-keep-workspace-alive nil))
 
 (use-package lsp-ui
-  :config
-  (setq lsp-lens-enable nil)
+  :custom
+  (lsp-lens-enable nil)
   :commands lsp-ui-mode
   :ensure t)
-
-(use-package yasnippet)
-
-(use-package company
-  :hook
-  ((nxml-mode . company-mode)
-   (prog-mode . company-mode))
-  :config
-  (setq company-tooltip-align-annotations t
-        company-minimum-prefix-length 1))
 
 (use-package emacs-lisp
              :ensure nil

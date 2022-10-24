@@ -87,22 +87,31 @@
                 (template-args-cont c-lineup-template-args +))))
 
 (defun tbricks-c++-mode-hook () "Set up C++ mode for Tbricks."
-       (c-set-style "tbricks")
-)
+       (c-set-style "tbricks"))
 
 (setq c-default-style '((java-mode . "java")
                         (awk-mode . "awk")
                         (c++-mode . "tbricks")
-			(c-mode . "tbricks")
+			            (c-mode . "tbricks")
                         (other . "gnu")))
 (add-hook 'c-mode-common-hook 'tbricks-c++-mode-hook)
-(add-hook 'c++-mode-hook #'modern-c++-font-lock-mode)
 (add-hook 'c-mode-common-hook #'yas-minor-mode)
-(add-hook 'c-mode-common-hook #'company-mode)
 
 (use-package clang-format
   :custom
   (clang-format-style "file"))
+
+(defun tbricks-apps-test-path (file-dir file-name)
+  "Change a Tbricks apps path to its tests path and add the .profdata file."
+  (let ((try
+         (concat (file-name-as-directory
+		          (replace-regexp-in-string "apps" "apps\/tests" file-dir))
+		         ".profdata")))
+    (and (file-exists-p try)
+         (cons (file-truename try) 'lcov))))
+
+(setq cov-coverage-mode 't)
+(setq cov-coverage-file-paths '(tbricks-apps-test-path))
 
 ;; CCLS
 ;; ------------------------------------------------------------------

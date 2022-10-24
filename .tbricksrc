@@ -31,6 +31,22 @@ function make()
     /bin/make "$@"
 }
 
+function tbgcov()
+{
+    DEPENDS_DIR=`echo ${PWD} | sed 's!/tests!!g'`
+    OUTPUT=.profraw
+    REPORT=.profdata
+    BINARY=`find ${DEPENDS_DIR} -name '*.so'`
+    if [ ! -x ${BINARY} ] ; then
+        echo "Unable to find binary to test in ${DEPENDS_DIR}"
+        return
+    fi
+    REGEXP_FILTER='.+_definitions.h|.+.hpp|.+_generated.h'
+    ${LLVM}/bin/llvm-profdata merge -sparse -o $OUTPUT `find . -name '*.profraw'`
+    ${LLVM}/bin/llvm-cov export -instr-profile $OUTPUT --format=lcov -ignore-filename-regex=${REGEXP_FILTER} ${BINARY} > ${REPORT}
+    ${LLVM}/bin/llvm-cov report -instr-profile $OUTPUT -ignore-filename-regex=${REGEXP_FILTER} ${BINARY}
+}
+
 function code-tidy()
 {
     ${LLVM}/share/clang/run-clang-tidy.py -j4 -fix  -style file -header-filter='^((?!(.*\/shared\/.*)).)*$' -clang-tidy-binary ${LLVM}/bin/clang-tidy -clang-apply-replacements-binary ${LLVM}/bin/clang-apply-replacements
@@ -53,8 +69,6 @@ function setsdk()
         fi
         ln -s $SDK $TBRICKS/sdk
         export SDK=$TBRICKS/sdk
-#        rm -rf $TB_APPS/.ccls-cache
-#        makedb $TB_APPS
         recompute_manpath
         echo "SDK is `realpath $SDK`"
     fi
@@ -67,16 +81,6 @@ function create_user()
     tbuser create ${USER} ${SYSTEM}
     tbuser set roles=Unrestricted ${USER} ${SYSTEM}
     tbuser set password= ${USER} ${SYSTEM}
-}
-
-function bearapp()
-{
-    BEAR=`which bear`
-    NPROC=`nproc`
-    touch .ccls
-    make clean
-    rm -rf .ccls-cache
-    name $BEAR make -j$NPROC RECURSIVE=YES
 }
 
 function recompute_manpath()
