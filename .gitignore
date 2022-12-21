@@ -1,3 +1,4 @@
 emea
 .ccls*
+.clangd
 compile_commands.json
