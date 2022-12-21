@@ -31,7 +31,8 @@ function make()
     /bin/make "$@"
 }
 
-function tbgcov()
+# make test -j5 RECURSIVE=YES TB_APPS=~/work/apps PROFILE=debug ENABLE_LLVM_COVERAGE=YES
+function tbcov()
 {
     DEPENDS_DIR=`echo ${PWD} | sed 's!/tests!!g'`
     OUTPUT=.profraw
