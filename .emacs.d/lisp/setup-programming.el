@@ -9,7 +9,6 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 
-
 (use-package yasnippet)
 
 (use-package company
@@ -44,7 +43,10 @@
 
 (use-package lsp-mode
   :ensure t
-  :hook (prog-mode . lsp-deferred)
+  :hook
+  (c-mode-common . lsp-deferred)
+  (python-mode . lsp-deferred)
+  (ruby-mode . lsp-deferred)
   :custom
   (lsp-idle-delay 0.1)
   (lsp-clients-clangd-args
@@ -52,7 +54,13 @@
   (lsp-prefer-flymake nil)
   (lsp-prefer-capf t)
   (lsp-auto-guess-root t)
-  (lsp-keep-workspace-alive nil))
+  (lsp-keep-workspace-alive nil)
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection '("solargraph" "stdio"))
+                    :major-modes '(ruby-mode)
+                    :priority -1
+                    :multi-root t
+                    :server-id 'ruby-ls)))
 
 (use-package lsp-ui
   :custom
@@ -84,12 +92,6 @@
 
 (use-package magit-todos
   :after (magit))
-
-(use-package robe
-  :config
-  (push 'company-robe company-backends)
-  :hook
-  ((ruby-mode . robe-mode)))
 
 ;(use-package hl-todo
 ;  :config
