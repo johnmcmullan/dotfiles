@@ -53,6 +53,14 @@ function code-tidy()
     ${LLVM}/share/clang/run-clang-tidy.py -j4 -fix  -style file -header-filter='^((?!(.*\/shared\/.*)).)*$' -clang-tidy-binary ${LLVM}/bin/clang-tidy -clang-apply-replacements-binary ${LLVM}/bin/clang-apply-replacements
 }
 
+function install-javadoc()
+{
+    MWD=$CWD
+    cd $TB_APPS
+    mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=${SDK}/java/sdk/apps_api.jar -Dversion=*correct_version*-SNAPSHOT -Djavadoc=${SDK}/java/javadoc/apps_api-javadoc.jar
+    cd $MWD
+}
+
 function setsdk()
 {
     VERSION=$1
@@ -69,6 +77,7 @@ function setsdk()
             rm -f $TBRICKS/sdk
         fi
         ln -s $SDK $TBRICKS/sdk
+	install-javadoc
         export SDK=$TBRICKS/sdk
         recompute_manpath
         echo "SDK is `realpath $SDK`"
@@ -79,9 +88,9 @@ function create_user()
 {
     SYSTEM=$1
     USER=`id -un`
-    tbuser create ${USER} ${SYSTEM}
-    tbuser set roles=Unrestricted ${USER} ${SYSTEM}
-    tbuser set password= ${USER} ${SYSTEM}
+    tbuser create ${USER}
+    tbuser set roles=Unrestricted ${USER}
+    tbuser set password= ${USER}
 }
 
 function recompute_manpath()
@@ -108,20 +117,20 @@ function recompute_appsroot()
 export PROMPT_COMMAND=prompt
 export PS1='\[\e[1;32m\]\h:\W\[\e[m\]$ '
 
+export TBRICKS="/opt/tbricks"
+export TBRICKS_ADMIN_CENTER=`xmllint --xpath 'string(/system/@name)' /etc/tbricks/ac.xml`
+export TBRICKS_ROOT=$TBRICKS
+export ADMIN_ROOT="$TBRICKS/admin"
+
 LOCAL_TBSH=$HOME/.local_tbsh
 if [ -f $LOCAL_TBSH ] ; then
     source $LOCAL_TBSH
-else
-    export TBRICKS="/opt/tbricks"
-    export TBRICKS_ADMIN_CENTER=dev_jmm_admin_sys
-    export TBRICKS_ROOT=$TBRICKS
-    export ADMIN_ROOT="$TBRICKS/admin"
 fi
 
 # clang++
-LLVM="/opt/llvm-10"
+LLVM=`ls -1rtd /opt/llvm*`
 # g++
-GCC_SUITE="/opt/gcc-8.2.0"
+GCC_SUITE=`ls -1rtd /opt/gcc*`
 export GCC_SUITE LLVM
 
 recompute_manpath
