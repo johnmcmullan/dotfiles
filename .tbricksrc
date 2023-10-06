@@ -122,6 +122,10 @@ export TBRICKS_ADMIN_CENTER=`xmllint --xpath 'string(/system/@name)' /etc/tbrick
 export TBRICKS_ROOT=$TBRICKS
 export ADMIN_ROOT="$TBRICKS/admin"
 
+# for installing apps on remote systems in the same admin centre
+# TBRICKS_ADMIN_CENTER="remote_admin_sys" /opt/tbricks/sdk/bin/tbplugin import -sf $META_FOLDER other_sys tbricks
+# TBRICKS_ADMIN_CENTER="remote_admin_sys" /opt/tbricks/sdk/bin/tbplugin reload  $APP_BINARY other_sys $VERSION
+
 LOCAL_TBSH=$HOME/.local_tbsh
 if [ -f $LOCAL_TBSH ] ; then
     source $LOCAL_TBSH
