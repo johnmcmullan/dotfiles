@@ -31,6 +31,26 @@ function make()
     /bin/make "$@"
 }
 
+function make_test()
+{
+    declare -A pids
+    TEST_NAME_ROOT=`basename $PWD`        
+    for I in $(seq 1 $1); do
+        TEST_NAME=${TEST_NAME_ROOT}_${I}
+        LOGS_FILE=${TEST_NAME} make test > /dev/null 2>&1 &
+        pids[$I]=$!
+    done
+    for I in ${!pids[@]}; do
+        wait ${pids[$I]}
+        TEST_NAME=${TEST_NAME_ROOT}_${I}
+        if [ -s ${TEST_NAME}.err ] ; then
+            echo "test ${TEST_NAME} failed"
+        else
+            rm -f ${TEST_NAME}.err ${TEST_NAME}.log
+        fi
+    done
+}
+
 # make test -j5 RECURSIVE=YES TB_APPS=~/work/apps PROFILE=debug ENABLE_LLVM_COVERAGE=YES
 function tbcov()
 {
@@ -55,10 +75,9 @@ function code-tidy()
 
 function install-javadoc()
 {
-    MWD=$CWD
-    cd $TB_APPS
+    (cd $TB_APPS
     mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=${SDK}/java/sdk/apps_api.jar -Dversion=*correct_version*-SNAPSHOT -Djavadoc=${SDK}/java/javadoc/apps_api-javadoc.jar
-    cd $MWD
+    )
 }
 
 function setsdk()
@@ -77,7 +96,7 @@ function setsdk()
             rm -f $TBRICKS/sdk
         fi
         ln -s $SDK $TBRICKS/sdk
-	install-javadoc
+	    install-javadoc
         export SDK=$TBRICKS/sdk
         recompute_manpath
         echo "SDK is `realpath $SDK`"
