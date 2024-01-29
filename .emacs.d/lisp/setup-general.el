@@ -33,6 +33,8 @@
 
 (require 'pbcopy)
 (turn-on-pbcopy)
+(require 'clipetty)
+(global-clipetty-mode)
 
 (setq inhibit-startup-message t)
 (setq inhibit-startup-echo-area-message "john.mcmullan")

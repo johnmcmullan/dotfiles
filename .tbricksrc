@@ -1,0 +1,172 @@
+# -*- mode: sh -*-
+
+function prompt()
+{
+    git status > /dev/null 2>&1
+    if [ $? -eq 0 ] ; then
+	BRANCH=`git rev-parse --abbrev-ref HEAD`
+	BRANCH_BASENAME=`basename $BRANCH`
+	echo -e '\033]2;'${BRANCH}'\007'
+    else
+	printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"
+    fi
+}
+
+function tempo_log()
+{
+    LOG=~/.tempo.log
+    JIRA="NONE"
+    git status > /dev/null 2>&1
+    if [ $? -eq 0 ] ; then
+        JIRA=`/bin/git rev-parse --abbrev-ref HEAD | cut -d\/ -f2 | cut -d\- -f1-2`
+    fi
+    TIMESTAMP=`date '+%Y%m%d %H:%M:%S'`
+    HOSTNAME=`hostname -s`
+    echo "${TIMESTAMP}|${HOSTNAME}|${JIRA}|${1}" >> $LOG
+}
+
+function make()
+{
+    tempo_log "make"
+    /bin/make "$@"
+}
+
+function make_test()
+{
+    declare -A pids
+    TEST_NAME_ROOT=`basename $PWD`
+    for I in $(seq 1 $1); do
+        TEST_NAME=${TEST_NAME_ROOT}_${I}
+        LOGS_FILE=${TEST_NAME} make test > /dev/null 2>&1 &
+        pids[$I]=$!
+    done
+    for I in ${!pids[@]}; do
+        wait ${pids[$I]}
+        TEST_NAME=${TEST_NAME_ROOT}_${I}
+        if [ -s ${TEST_NAME}.err ] ; then
+            echo "test ${TEST_NAME} failed"
+        else
+            rm -f ${TEST_NAME}.err ${TEST_NAME}.log
+        fi
+    done
+}
+
+# make test -j5 RECURSIVE=YES TB_APPS=~/work/apps PROFILE=debug ENABLE_LLVM_COVERAGE=YES
+function tbcov()
+{
+    DEPENDS_DIR=`echo ${PWD} | sed 's!/tests!!g'`
+    OUTPUT=.profraw
+    REPORT=.profdata
+    BINARY=`find ${DEPENDS_DIR} -name '*.so'`
+    if [ ! -x ${BINARY} ] ; then
+        echo "Unable to find binary to test in ${DEPENDS_DIR}"
+        return
+    fi
+    REGEXP_FILTER='.+_definitions.h|.+.hpp|.+_generated.h|third_party.+|shared.+'
+    ${LLVM}/bin/llvm-profdata merge -sparse -o $OUTPUT `find . -name '*.profraw'`
+    ${LLVM}/bin/llvm-cov export -instr-profile $OUTPUT --format=lcov -ignore-filename-regex=${REGEXP_FILTER} ${BINARY} > ${REPORT}
+    ${LLVM}/bin/llvm-cov report -instr-profile $OUTPUT -ignore-filename-regex=${REGEXP_FILTER} ${BINARY}
+}
+
+function code-tidy()
+{
+    ${LLVM}/share/clang/run-clang-tidy.py -j4 -fix  -style file -header-filter='^((?!(.*\/shared\/.*)).)*$' -clang-tidy-binary ${LLVM}/bin/clang-tidy -clang-apply-replacements-binary ${LLVM}/bin/clang-apply-replacements
+}
+
+function install-javadoc()
+{
+    (cd $TB_APPS
+    mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=${SDK}/java/sdk/apps_api.jar -Dversion=*correct_version*-SNAPSHOT -Djavadoc=${SDK}/java/javadoc/apps_api-javadoc.jar
+    )
+}
+
+function setsdk()
+{
+    VERSION=$1
+    SELECTED_COUNT=`ls -ald $TBRICKS/*sdk-*$VERSION* | wc -l`
+    if [ -z "$SELECTED_COUNT" ]; then
+        echo "No sdk version: $VERSION"
+        return
+    elif [ $SELECTED_COUNT != "1" ]; then
+        echo "$VERSION is ambiguous when selecting sdk"
+        return
+    else
+        export SDK=`eval echo "$TBRICKS/*sdk-$VERSION*"`
+        if [ -L $TBRICKS/sdk ] ; then
+            rm -f $TBRICKS/sdk
+        fi
+        ln -s $SDK $TBRICKS/sdk
+	    install-javadoc
+        export SDK=$TBRICKS/sdk
+        recompute_manpath
+        echo "SDK is `realpath $SDK`"
+    fi
+}
+
+function create_user()
+{
+    SYSTEM=$1
+    USER=`id -un`
+    tbuser create ${USER}
+    tbuser set roles=Unrestricted ${USER}
+    tbuser set password= ${USER}
+}
+
+function recompute_manpath()
+{
+    MANPATH=/usr/share/man:/usr/local/share/man:/usr/share/locale/man:
+    MANPATH+=$LLVM/share/man:$GCC_SUITE/share/man:
+    MANPATH+=$ADMIN_ROOT/doc/man:$SDK/doc/man:$SDK/doc/libraries/strategy/man
+    export MANPATH
+}
+
+function recompute_appsroot()
+{
+    SEARCH_PATH=".."
+    while [ ! -f ${SEARCH_PATH}/.appsroot ] ; do
+        SEARCH_PATH="${SEARCH_PATH}/.."
+        if [ `pwd | tr '/' '\n' | wc -l` -lt `echo ${SEARCH_PATH} | tr '/' '\n' | wc -l` ] ; then
+            return 1
+        fi
+    done
+
+    export MK_SRCROOT=`readlink -f ${SEARCH_PATH}`
+}
+
+export PROMPT_COMMAND=prompt
+export PS1='\[\e[1;32m\]\h:\W\[\e[m\]$ '
+
+export TBRICKS="/opt/tbricks"
+export TBRICKS_ADMIN_CENTER=`xmllint --xpath 'string(/system/@name)' /etc/tbricks/ac.xml`
+export TBRICKS_ROOT=$TBRICKS
+export ADMIN_ROOT="$TBRICKS/admin"
+
+# for installing apps on remote systems in the same admin centre
+# TBRICKS_ADMIN_CENTER="remote_admin_sys" /opt/tbricks/sdk/bin/tbplugin import -sf $META_FOLDER other_sys tbricks
+# TBRICKS_ADMIN_CENTER="remote_admin_sys" /opt/tbricks/sdk/bin/tbplugin reload  $APP_BINARY other_sys $VERSION
+
+LOCAL_TBSH=$HOME/.local_tbsh
+if [ -f $LOCAL_TBSH ] ; then
+    source $LOCAL_TBSH
+fi
+
+# clang++
+LLVM=`ls -1rtd /opt/llvm*`
+# g++
+GCC_SUITE=`ls -1rtd /opt/gcc*`
+export GCC_SUITE LLVM
+
+recompute_manpath
+
+if [ -f ${ADMIN_ROOT}/etc/bash/.tbricks_completion.bash ] ; then
+    source $ADMIN_ROOT/etc/bash/.tbricks_completion.bash
+fi
+
+export TB_APPS=$HOME/work/apps
+export MK_SRCROOT=$HOME/work/apps
+export MAKE=gmake
+: "${SDK:=$TBRICKS/sdk}"
+export SDK
+export CLANG_TIDY_CHECKS='-*,boost-*,bugprone-*,bugprone-bool-pointer-implicit-conversion,bugprone-easily-swappable-parameters,-bugprone-forward-declaration-namespace,bugprone-misplaced-widening-cast,bugprone-move-forwarding-reference,-bugprone-narrowing-conversions,bugprone-string-constructor,bugprone-string-integer-assignment,bugprone-unused-raii,bugprone-use-after-move,cert-dcl21-cpp,cert-dcl50-cpp,cert-dcl58-cpp,cert-env33-c,cert-err34-c,cert-err52-cpp,cert-err60-cpp,cert-flp30-c,cert-mem57-cpp,cert-msc51-cpp,cert-oop57-cpp,cert-oop58-cpp,clang-analyzer-*,-clang-analyzer-*mpi*,-clang-analyzer-*osx*,concurrency-mt-unsafe,cppcoreguidelines-avoid-goto,cppcoreguidelines-avoid-non-const-global-variables,cppcoreguidelines-init-variables,cppcoreguidelines-interfaces-global-init,cppcoreguidelines-macro-usage,cppcoreguidelines-narrowing-conversions,cppcoreguidelines-no-malloc,cppcoreguidelines-pro-bounds-constant-array-index,cppcoreguidelines-pro-type-const-cast,cppcoreguidelines-pro-type-cstyle-cast,cppcoreguidelines-pro-type-member-init,cppcoreguidelines-pro-type-reinterpret-cast,cppcoreguidelines-pro-type-static-cast-downcast,cppcoreguidelines-pro-type-union-access,cppcoreguidelines-pro-type-vararg,cppcoreguidelines-slicing,cppcoreguidelines-special-member-functions,google-build-namespaces,google-explicit-constructor,google-global-names-in-headers,google-readability-casting,google-runtime-int,hicpp-exception-baseclass,hicpp-multiway-paths-covered,hicpp-signed-bitwise,llvm-include-order,llvm-namespace-comment,misc-*,-misc-confusable-identifiers,-misc-non-private-member-variables-in-classes,-misc-unused-parameters,modernize-*,-modernize-use-nodiscard,-modernize-use-trailing-return-type,performance-*,performance-implicit-conversion-in-loop,performance-inefficient-vector-operation,performance-move-const-arg,performance-no-automatic-move,readability-*,readability-braces-around-statements,readability-else-after-return,-readability-function-cognitive-complexity,-readability-function-size,-readability-identifier-length,readability-implicit-bool-conversion,readability-isolate-declaration,-readability-magic-numbers,-readability-redundant-access-specifiers'
+ 
+export CLANG_TIDY_ARGS="--quiet --config=\"{Checks: '*', CheckOptions: [{key: readability-implicit-bool-conversion.AllowIntegerConditions, value: 1}, {key: readability-implicit-bool-conversion.AllowPointerConditions, value: 1}, {key: performance-move-const-arg.CheckTriviallyCopyableMove, value: 0}]}\""

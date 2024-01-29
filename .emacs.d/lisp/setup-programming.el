@@ -51,6 +51,13 @@
   (c-mode-common . lsp-deferred)
   (python-mode . lsp-deferred)
   (ruby-mode . lsp-deferred)
+  :config
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-tramp-connection "/opt/llvm-10/bin/clangd")
+                    :major-modes '(c-mode c++-mode)
+                    :priority -1
+                    :remote? t
+                    :server-id 'clangd-remote))
   :custom
   (lsp-idle-delay 0.1)
   (lsp-clients-clangd-args
