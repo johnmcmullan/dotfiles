@@ -9,6 +9,10 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 
+(setq tramp-default-method 'ssh)
+(setq tramp-default-user "john.mcmullan")
+(setq tramp-default-host "ec2")
+
 (use-package yasnippet)
 
 (use-package company
