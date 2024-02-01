@@ -4,11 +4,11 @@
 ;;; Code:
 
 (setq visible-bell t)
-(menu-bar-mode -1)
 
 ;; Enable mouse support
 (unless window-system
   (require 'mouse)
+  (menu-bar-mode -1)
   (xterm-mouse-mode t)
   (global-set-key [mouse-4] (lambda ()
                               (interactive)
@@ -19,6 +19,17 @@
   (defun track-mouse (e))
   (setq mouse-sel-mode t)
 )
+
+(if window-system
+    (setq url-proxy-services
+          '(("no_proxy" . "^\\(localhost\\|10.*\\)")
+            ("http" . "10.32.22.18:8080")
+            ("https" . "10.32.22.18:8080")))
+  (setq url-http-proxy-basic-auth-storage
+        (list (list "10.32.22.18:8080"
+                    (cons "Input your LDAP UID !"
+                          (base64-encode-string "mcmullanj:K0n4L4v4D0m3!08")))))
+  )
 
 (require 'pbcopy)
 (turn-on-pbcopy)

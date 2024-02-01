@@ -2,4 +2,5 @@ emea
 .ccls*
 .clangd
 compile_commands.json
+.DS_Store
 .profdata
