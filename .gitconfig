@@ -11,3 +11,5 @@
 	diff = always
 #[diff]
 #	wordRegex = [A-Za-z0-9_]+|[^A-Za-z0-9_]
+[pull]
+	rebase = false
