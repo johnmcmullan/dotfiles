@@ -31,10 +31,15 @@
                           (base64-encode-string "mcmullanj:K0n4L4v4D0m3!08")))))
   )
 
-(require 'pbcopy)
-(turn-on-pbcopy)
-(require 'clipetty)
-(global-clipetty-mode)
+(use-package pbcopy
+  :config
+  (turn-on-pbcopy)
+  )
+
+(use-package clipetty
+  :config
+  (global-clipetty-mode)
+  )
 
 (setq inhibit-startup-message t)
 (setq inhibit-startup-echo-area-message "john.mcmullan")

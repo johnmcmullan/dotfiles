@@ -145,7 +145,7 @@ function recompute_path()
     fi
     if [ -d ${HOME}/work/tb ] ; then
         PATH+=${HOME}/work/tb/toolchain/x86_64-unknown-linux/bin:
-        PATH+=${HOME}/work/tb/build.x86_64-unknown-linux/platform/bin64:
+        PATH+=${HOME}/work/tb/build.x86_64-unknown-linux/bin:
     fi
     if [ -d ${SDK} ] ; then
         PATH+=${SDK}/bin:
