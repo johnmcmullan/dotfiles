@@ -12,7 +12,8 @@
 (setq scroll-step 2) ;; keyboard scroll one line at a time
 
 (global-set-key (kbd "C-x g") 'goto-line)
-(global-set-key (kbd "C-x o") ' ff-find-other-file)
+(global-set-key (kbd "C-x o") 'ff-find-other-file)
+(global-set-key (kbd "C-x f") 'lsp-execute-code-action)
 (global-set-key (kbd "M-3") #'(lambda () (interactive) (insert "#")))
 
 (eval-after-load "cc-mode"
