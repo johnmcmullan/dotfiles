@@ -100,6 +100,7 @@ function setsdk()
         export SDK=$TBRICKS/sdk
         recompute_manpath
         recompute_path
+        recompile_apps_dbs
         echo "SDK is `realpath $SDK`"
     fi
 }
@@ -111,6 +112,11 @@ function create_user()
     tbuser create ${USER}
     tbuser set roles=Unrestricted ${USER}
     tbuser set password= ${USER}
+}
+
+function recompile_apps_dbs()
+{
+    (cd ${TB_APPS}; make db.create RECURSIVE=YES) > /dev/null 2>&1 &
 }
 
 function recompute_manpath()
@@ -225,6 +231,4 @@ fi
 export TB_APPS=$HOME/work/apps
 export MK_SRCROOT=$HOME/work/apps
 export MAKE=gmake
-export CLANG_TIDY_CHECKS='-*,boost-*,bugprone-*,bugprone-bool-pointer-implicit-conversion,bugprone-easily-swappable-parameters,-bugprone-forward-declaration-namespace,bugprone-misplaced-widening-cast,bugprone-move-forwarding-reference,-bugprone-narrowing-conversions,bugprone-string-constructor,bugprone-string-integer-assignment,bugprone-unused-raii,bugprone-use-after-move,cert-dcl21-cpp,cert-dcl50-cpp,cert-dcl58-cpp,cert-env33-c,cert-err34-c,cert-err52-cpp,cert-err60-cpp,cert-flp30-c,cert-mem57-cpp,cert-msc51-cpp,cert-oop57-cpp,cert-oop58-cpp,clang-analyzer-*,-clang-analyzer-*mpi*,-clang-analyzer-*osx*,concurrency-mt-unsafe,cppcoreguidelines-avoid-goto,cppcoreguidelines-avoid-non-const-global-variables,cppcoreguidelines-init-variables,cppcoreguidelines-interfaces-global-init,cppcoreguidelines-macro-usage,cppcoreguidelines-narrowing-conversions,cppcoreguidelines-no-malloc,cppcoreguidelines-pro-bounds-constant-array-index,cppcoreguidelines-pro-type-const-cast,cppcoreguidelines-pro-type-cstyle-cast,cppcoreguidelines-pro-type-member-init,cppcoreguidelines-pro-type-reinterpret-cast,cppcoreguidelines-pro-type-static-cast-downcast,cppcoreguidelines-pro-type-union-access,cppcoreguidelines-pro-type-vararg,cppcoreguidelines-slicing,cppcoreguidelines-special-member-functions,google-build-namespaces,google-explicit-constructor,google-global-names-in-headers,google-readability-casting,google-runtime-int,hicpp-exception-baseclass,hicpp-multiway-paths-covered,hicpp-signed-bitwise,llvm-include-order,llvm-namespace-comment,misc-*,-misc-confusable-identifiers,-misc-non-private-member-variables-in-classes,-misc-unused-parameters,modernize-*,-modernize-use-nodiscard,-modernize-use-trailing-return-type,performance-*,performance-implicit-conversion-in-loop,performance-inefficient-vector-operation,performance-move-const-arg,performance-no-automatic-move,readability-*,readability-braces-around-statements,readability-else-after-return,-readability-function-cognitive-complexity,-readability-function-size,-readability-identifier-length,readability-implicit-bool-conversion,readability-isolate-declaration,-readability-magic-numbers,-readability-redundant-access-specifiers'
- 
-export CLANG_TIDY_ARGS="--quiet --config=\"{Checks: '*', CheckOptions: [{key: readability-implicit-bool-conversion.AllowIntegerConditions, value: 1}, {key: readability-implicit-bool-conversion.AllowPointerConditions, value: 1}, {key: performance-move-const-arg.CheckTriviallyCopyableMove, value: 0}]}\""
+

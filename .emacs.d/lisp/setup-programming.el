@@ -73,7 +73,7 @@
 (use-package lsp-ui
   :custom
   (lsp-lens-enable nil)
-  (lsp-ui-doc-enable nil)
+  (lsp-ui-doc-enable t)
   (lsp-ui-doc-use-childframe nil)
   (lsp-ui-doc-position 'top)
   (lsp-ui-doc-include-signature t)

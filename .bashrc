@@ -25,3 +25,5 @@ fi
 alias em='emacsclient -nw'
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias bc='bc -l'
+
+umask 007
