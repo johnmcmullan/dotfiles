@@ -22,11 +22,8 @@
   :custom
   (company-backends '(company-capf))
   (company-tooltip-align-annotations t)
-  (company-transformers nil)
   (company-lsp-async t)
-  (company-lsp-cache-candidates nil)
-  (company-idle-delay 0.0)
-  (company-minimum-prefix-length 1))
+  )
 
 (use-package flycheck
   :ensure t
@@ -61,7 +58,7 @@
   :custom
   (lsp-idle-delay 0.1)
   (lsp-clients-clangd-args
-   (list "-j=4" "--clang-tidy" "--header-insertion-decorators=0" (substitute-env-vars "--compile-commands-dir=${TB_APPS}")))
+   (list "-j=4" "--clang-tidy" "--header-insertion-decorators=0" ))
   (lsp-prefer-flymake nil)
   (lsp-prefer-capf t)
   (lsp-auto-guess-root t)
@@ -77,12 +74,12 @@
   :custom
   (lsp-lens-enable nil)
   (lsp-ui-doc-enable t)
-  (lsp-ui-doc-use-childframe t)
+  (lsp-ui-doc-use-childframe nil)
   (lsp-ui-doc-position 'top)
   (lsp-ui-doc-include-signature t)
   (lsp-ui-sideline-enable nil)
   (lsp-ui-flycheck-enable t)
-  (lsp-ui-flycheck-list-position 'right)
+  (lsp-ui-flycheck-list-position 'bottom)
   (lsp-ui-flycheck-live-reporting t)
   (lsp-ui-peek-enable t)
   (lsp-ui-peek-list-width 60)
