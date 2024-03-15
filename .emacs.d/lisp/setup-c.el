@@ -84,7 +84,13 @@
                 (statement-case-open . 0)
                 (string . -1000)
                 (substatement-label . 0)
-                (template-args-cont c-lineup-template-args +))))
+                (template-args-cont c-lineup-template-args +))
+               (c-hanging-braces-alist . ((substatement-open before after)))
+               (c-hanging-semi&colon-c++ (c-space-after-yank))
+               (c-hanging-colons-alist . ((member-init-intro before)))
+               (c-hanging-semi&colon-c++ (c-space-after-yank))
+               (c-cleanup-list . (scope-operator empty-defun-braces defun-close-semi)))
+               )
 
 (defun tbricks-c++-mode-hook () "Set up C++ mode for Tbricks."
        (c-set-style "tbricks"))
