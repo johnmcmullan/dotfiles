@@ -100,7 +100,6 @@ function setsdk()
         export SDK=$TBRICKS/sdk
         recompute_manpath
         recompute_path
-        recompile_apps_dbs
         echo "SDK is `realpath $SDK`"
     fi
 }
@@ -116,7 +115,7 @@ function create_user()
 
 function recompile_apps_dbs()
 {
-    (cd ${TB_APPS}; make db.create RECURSIVE=YES) > /dev/null 2>&1 &
+    (cd ${TB_APPS}; nice -n 19 make db.create -j5 RECURSIVE=YES > /dev/null 2>&1 & )
 }
 
 function recompute_manpath()
