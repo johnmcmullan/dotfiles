@@ -28,7 +28,7 @@
   (setq url-http-proxy-basic-auth-storage
         (list (list "10.32.22.18:8080"
                     (cons "Input your LDAP UID !"
-                          (base64-encode-string "mcmullanj:K0n4L4v4D0m3!08")))))
+                          (base64-encode-string "mcmullanj:K0n4L4v4D0m3!09")))))
   )
 
 (use-package pbcopy
