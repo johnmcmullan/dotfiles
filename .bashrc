@@ -23,6 +23,7 @@ fi
 #export CA_CERT_FILE=/etc/pki/ca-bundle.crt
 
 alias em='emacsclient -nw'
+# https://www.atlassian.com/git/tutorials/dotfiles
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 alias bc='bc -l'
 
