@@ -51,6 +51,20 @@ function make_test()
     done
 }
 
+function make_gtest()
+{
+    declare -A pids
+    TEST_NAME_ROOT=`grep NAME GNUmakefile | cut -d= -f2 | sed 's/^ *//;s/ *$//'`
+    for I in $(seq 1 $1); do
+        TEST_NAME=${TEST_NAME_ROOT}_${I}
+        (make test | grep FAILED; mv tests.log $(TEST_NAME).log) &
+        pids[$I]=$!
+    done
+    for I in ${!pids[@]}; do
+        wait ${pids[$I]}
+    done
+}
+
 # make test -j5 RECURSIVE=YES TB_APPS=~/work/apps PROFILE=debug ENABLE_LLVM_COVERAGE=YES
 function tbcov()
 {
@@ -96,7 +110,7 @@ function setsdk()
             rm -f $TBRICKS/sdk
         fi
         ln -s $SDK $TBRICKS/sdk
-	    install-javadoc
+	    #install-javadoc
         export SDK=$TBRICKS/sdk
         recompute_manpath
         recompute_path
