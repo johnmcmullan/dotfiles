@@ -153,7 +153,7 @@ function recompute_manpath()
 # make sure that each additional PATH element ends with a colon
 function recompute_path()
 {
-    export PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:${HOME}/bin:
+    export PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:${HOME}/bin:
     
     # Tbricks
     if [ -d ${LLVM} ] ; then
