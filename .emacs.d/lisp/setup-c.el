@@ -11,6 +11,8 @@
 (c-add-style "tbricks"
              '("linux"
                (c-basic-offset . 4)     ; Guessed value
+               (indent-tabs-mode . nil)
+               (tab-width . 4)
                (c-offsets-alist
                 (block-close . 0)       ; Guessed value
                 (brace-list-intro . ++) ; Guessed value
