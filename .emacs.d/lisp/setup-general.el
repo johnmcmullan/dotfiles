@@ -18,7 +18,7 @@
                               (scroll-up 1)))
   (defun track-mouse (e))
   (setq mouse-sel-mode t)
-)
+  )
 
 (if window-system
     (setq url-proxy-services
@@ -43,6 +43,8 @@
 
 (setq inhibit-startup-message t)
 (setq inhibit-startup-echo-area-message "john.mcmullan")
+(setq show-trailing-whitespace t)
+(setq-default indent-tabs-mode nil)
 
 (server-start)
 
@@ -61,8 +63,7 @@
 (setq create-lockfiles nil)
 
 ;; never any tabs, anywhere!!!!
-;(setq-default indent-tabs-mode nil)
-
+(setq-default indent-tabs-mode nil)
 ; Highlighting of FIXME and TODO et al
 ;(require 'fic-mode)
 ;(add-hook 'c-mode-common-hook 'fic-mode)
@@ -70,6 +71,7 @@
 
 ;; remove trailing whitespace automatically
 ;(require 'ws-butler)
+
 
 ; https://www.emacswiki.org/emacs/EightyColumnRule
 ;(require 'fill-column-indicator)
