@@ -23,6 +23,7 @@
   (company-lsp-async t)
   )
 
+; AI enhanced flycheck
 (use-package flycheck
   :ensure t
   :defer t
@@ -30,15 +31,65 @@
   :custom
   (flycheck-display-errors-delay .3)
   (flycheck-idle-change-delay 2.0)
+  (flycheck-indication-mode 'left-margin)  ; Show indicators in the left margin
+  (flycheck-highlighting-mode 'symbols)    ; Your existing setting
+  (flycheck-standard-error-navigation t)   ; Enable standard error navigation
   :config
   (progn
-    ;; Settings
+    ;; Your existing settings
     (setq-default flycheck-emacs-lisp-initialize-packages t
                   flycheck-highlighting-mode 'symbols
-                  flycheck-check-syntax-automatically '(save idle-change)))
+                  flycheck-check-syntax-automatically '(save idle-change))
+    
+    ;; Enhanced error display for terminal
+    (setq flycheck-error-list-format
+          `[("Line" 5 flycheck-error-list-entry-< :right-align t)
+            ("Col" 3 nil :right-align t)
+            ("Level" 8 flycheck-error-list-entry-level-<)
+            ("Message" 0 t)
+            ("ID" 6 t)])
+    
+    ;; Customize error display function
+    (defun my/flycheck-display-error-at-point ()
+      "Display flycheck error in echo area more clearly."
+      (interactive)
+      (when flycheck-mode
+        (let ((errors (flycheck-overlay-errors-at (point))))
+          (when errors
+            (message "%s" (mapconcat #'flycheck-error-message errors "\n"))))))
+    
+    ;; Set up margins for error indication
+    (add-hook 'flycheck-mode-hook
+              (lambda ()
+                (setq left-margin-width 1)
+                (set-window-buffer (selected-window) (current-buffer)))))
+  
   :bind
-  ("M-n" . flycheck-next-error)
-  ("M-p" . flycheck-previous-error))
+  (("M-n" . flycheck-next-error)
+   ("M-p" . flycheck-previous-error)
+   ;; Additional convenient bindings for terminal use
+   ("C-c ! l" . flycheck-list-errors)        ; Quick access to error list
+   ("C-c ! n" . flycheck-next-error)         ; Alternative navigation
+   ("C-c ! p" . flycheck-previous-error)
+   ("C-c ! d" . my/flycheck-display-error-at-point))) ; Show current error clearly
+
+
+;(use-package flycheck
+;  :ensure t
+;  :defer t
+;  :diminish
+;  :custom
+;  (flycheck-display-errors-delay .3)
+;  (flycheck-idle-change-delay 2.0)
+;  :config
+;  (progn
+;    ;; Settings
+;    (setq-default flycheck-emacs-lisp-initialize-packages t
+;                  flycheck-highlighting-mode 'symbols
+;                  flycheck-check-syntax-automatically '(save idle-change)))
+;  :bind
+;  ("M-n" . flycheck-next-error)
+;  ("M-p" . flycheck-previous-error))
 
 (use-package lsp-mode
   :ensure t
@@ -80,11 +131,18 @@
   (lsp-ui-flycheck-enable t)
   (lsp-ui-flycheck-list-position 'bottom)
   (lsp-ui-flycheck-live-reporting t)
+  (lsp-ui-flycheck-indicate-warnings nil) ; AI suggestion
   (lsp-ui-peek-enable t)
   (lsp-ui-peek-list-width 60)
   (lsp-ui-peek-peek-height 25)
+  (lsp-ui-peek-always-show nil) ; AI suggestion
+  (lsp-ui-peek-show-directory t) ; AI suggestion
   :commands lsp-ui-mode
-  :ensure t)
+  :ensure t
+  :bind
+  (:map lsp-ui-mode-map
+        ("C-c d" . lsp-ui-doc-show)    ; Manual doc popup
+        ("C-c h" . lsp-ui-doc-hide)))  ; Hide doc popup)
 
 (use-package yasnippet)
 (add-hook 'c-mode-common-hook #'yas-minor-mode)
