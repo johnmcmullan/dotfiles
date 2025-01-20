@@ -13,8 +13,6 @@
 (setq tramp-default-user "john.mcmullan")
 (setq tramp-default-host "ec2")
 
-(use-package yasnippet)
-
 (use-package company
   :hook
   ((nxml-mode . company-mode)
@@ -88,9 +86,22 @@
   :commands lsp-ui-mode
   :ensure t)
 
+(use-package yasnippet)
+(add-hook 'c-mode-common-hook #'yas-minor-mode)
+
 (use-package emacs-lisp
              :ensure nil
              :defer t)
+
+(use-package ellama
+  :config
+  (require 'llm-ollama)
+  (setq ellama-provider
+		'(make-llm-ollama
+		  :host "10.73.111.146"
+		  :port 11434
+		  :chat-model "qwen2.5-coder:14b"
+		  :embedding-model "nomic-embed-text")))
 
 ;; GIT
 (use-package magit
