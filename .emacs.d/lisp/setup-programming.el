@@ -148,8 +148,15 @@
 (add-hook 'c-mode-common-hook #'yas-minor-mode)
 
 (use-package emacs-lisp
-             :ensure nil
-             :defer t)
+  :ensure nil
+  :defer t)
+
+(use-package copilot
+  :ensure t
+  :bind
+  (:map lsp-ui-mode-map
+        ("C-c c" . copilot-complete)
+        ("C-c a" . copilot-accept-completion)))
 
 (use-package ellama
   :config
