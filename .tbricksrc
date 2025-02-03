@@ -82,6 +82,11 @@ function tbcov()
     ${LLVM}/bin/llvm-cov report -instr-profile $OUTPUT -ignore-filename-regex=${REGEXP_FILTER} ${BINARY}
 }
 
+function ailog()
+{
+    TBRICKS_TBLOG_FORMAT='$Log|$Level|$Message' tblog "$@"
+}
+
 function code-tidy()
 {
     ${LLVM}/share/clang/run-clang-tidy.py -j4 -fix  -style file -header-filter='^((?!(.*\/shared\/.*)).)*$' -clang-tidy-binary ${LLVM}/bin/clang-tidy -clang-apply-replacements-binary ${LLVM}/bin/clang-apply-replacements
