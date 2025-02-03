@@ -18,8 +18,14 @@
                               (scroll-up 1)))
   (defun track-mouse (e))
   (setq mouse-sel-mode t)
-  (use-package eterm-256color
-    :hook (term-mode . eterm-256color-mode))
+  ;; Enable 24-bit color support
+  (setq xterm-color-use-bright-colors t)
+  
+  ;; Set up ANSI color mapping
+  (setq ansi-color-for-comint-mode t)
+  (setq ansi-color-names-vector
+        ["black" "red3" "green3" "yellow3"
+         "blue2" "magenta3" "cyan3" "gray90"])
 
   (setq auto-window-vscroll nil)
   )
