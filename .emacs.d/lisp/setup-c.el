@@ -104,10 +104,17 @@
                         (other . "gnu")))
 (add-hook 'c-mode-common-hook 'tbricks-c++-mode-hook)
 (add-hook 'c-mode-common-hook #'yas-minor-mode)
+(add-hook 'c-mode-common-hook 'modern-c++-font-lock-mode)
 
-(use-package clang-format
-  :custom
-  (clang-format-style "file"))
+;; CMake support
+(use-package cmake-mode
+  :mode ("CMakeLists\\.txt\\'" "\\.cmake\\'"))
+
+;; C++ code formatting
+(setq clang-format-style-option "file")
+(add-hook 'c++-mode-hook
+          (lambda ()
+            (add-hook 'before-save-hook 'clang-format-buffer nil t)))
 
 (defun tbricks-apps-test-path (file-dir file-name)
   "Change a Tbricks apps path to its tests path and add the .profdata file."
@@ -120,20 +127,6 @@
 
 (setq cov-coverage-mode 't)
 (setq cov-coverage-file-paths '(tbricks-apps-test-path))
-
-;; CCLS
-;; ------------------------------------------------------------------
-
-;(if (executable-find "ccls")
-;    (use-package ccls
-;                 :defer t
-;                 :init
-;                 (add-hook 'c-mode-common-hook (lambda () (require 'ccls) (lsp)))
-;                 :custom
-;                 (ccls-args '("--log-file=/home/john.mcmullan/tmp/ccls.log"))
-;                 (ccls-initialization-options
-;                  '(:clang (:resourceDir "/opt/llvm-10/lib64/clang/10.0.1"))))
-;  )
 
 (provide 'setup-c)
 ;;; setup-c.el ends here

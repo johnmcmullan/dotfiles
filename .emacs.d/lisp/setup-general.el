@@ -18,17 +18,10 @@
                               (scroll-up 1)))
   (defun track-mouse (e))
   (setq mouse-sel-mode t)
-  )
+  (use-package eterm-256color
+    :hook (term-mode . eterm-256color-mode))
 
-(if window-system
-    (setq url-proxy-services
-          '(("no_proxy" . "^\\(localhost\\|10.*\\)")
-            ("http" . "10.32.22.18:8080")
-            ("https" . "10.32.22.18:8080")))
-  (setq url-http-proxy-basic-auth-storage
-        (list (list "10.32.22.18:8080"
-                    (cons "Input your LDAP UID !"
-                          (base64-encode-string "mcmullanj:K0n4L4v4D0m3!09")))))
+  (setq auto-window-vscroll nil)
   )
 
 (use-package pbcopy
@@ -85,6 +78,22 @@
   (if (bolp)
       (back-to-indentation)
     (beginning-of-line)))
+
+;; Project management
+(use-package projectile
+  :config
+  (projectile-mode +1)
+  ;; Add compile_commands.json as a project marker
+  (add-to-list 'projectile-project-root-files "compile_commands.json")
+  
+  :bind-keymap
+  ("C-c p" . projectile-command-map))
+
+;; Improved file navigation
+;(use-package counsel
+;  :bind
+;  ("C-x C-f" . counsel-find-file)
+;  ("M-x" . counsel-M-x))
 
 (provide 'setup-general)
 ;;; setup-general ends here

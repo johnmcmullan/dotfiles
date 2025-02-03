@@ -18,6 +18,16 @@
   ((nxml-mode . company-mode)
    (prog-mode . company-mode))
   :custom
+   ;; Show numbers for quick navigation
+  (company-show-quick-access t)
+  ;; Reduce typing required for completion
+  (company-minimum-prefix-length 2)
+  ;; Show more suggestions
+  (company-tooltip-limit 20)
+  ;; Faster completion
+  (company-idle-delay 0.1)
+  ;; Align annotations to the right
+  (company-tooltip-align-annotations t)
   (company-backends '(company-capf))
   (company-tooltip-align-annotations t)
   (company-lsp-async t)
@@ -73,6 +83,33 @@
    ("C-c ! p" . flycheck-previous-error)
    ("C-c ! d" . my/flycheck-display-error-at-point))) ; Show current error clearly
 
+(use-package avy
+  :ensure t
+  :bind
+  ("C-c ;" . avy-goto-char)
+  ("C-c '" . avy-goto-char-2)
+  ("C-c g g" . avy-goto-line)
+  ("C-c g w" . avy-goto-word-1)
+  :config
+  ;; You might want to adjust these for terminal use
+  (setq avy-background t)
+  (setq avy-highlight-first t)
+  (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?q ?w ?e ?r ?u ?i ?o ?p)))
+
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook)
+  :custom
+  (dashboard-startup-banner 'official)
+  (dashboard-items '((recents . 10)
+                    (projects . 5)
+                    (bookmarks . 5)))
+  (dashboard-set-heading-icons t)
+  (dashboard-set-file-icons t)
+  ;; Show in terminal even when started with emacsclient
+  (dashboard-set-init-info t)
+  (initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))))
 
 ;(use-package flycheck
 ;  :ensure t
@@ -111,6 +148,9 @@
    (list "-j=4" "--clang-tidy" "--header-insertion-decorators=0" "--completion-style=detailed" "--header-insertion=never" "--log=verbose"))
   (lsp-prefer-flymake nil)
   (lsp-prefer-capf t)
+  (lsp-headerline-breadcrumb-mode t)
+  (lsp-modeline-diagnostics-mode t)
+  (lsp-modeline-code-actions-mode t)
   (lsp-auto-guess-root t)
   (lsp-keep-workspace-alive nil)
   (lsp-register-client
