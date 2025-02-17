@@ -89,8 +89,70 @@
 (use-package projectile
   :config
   (projectile-mode +1)
-  ;; Add compile_commands.json as a project marker
-  (add-to-list 'projectile-project-root-files "compile_commands.json")
+  (setq projectile-project-root-files
+      (cons "compile_commands.json" 
+            (delete "pom.xml" projectile-project-root-files)))
+
+    ;; Function to find the nearest directory with a GNUmakefile
+  (defun my/tbricks-find-app-root (dir)
+    "Find the Tbricks app root by looking for GNUmakefile."
+    (let ((root (locate-dominating-file dir "GNUmakefile")))
+      (when root
+        (file-truename root))))
+
+  ;; Custom function to create compilation database
+  (defun my/projectile-create-compilation-database ()
+    "Create compilation database and reload LSP workspace."
+    (interactive)
+    (let* ((current-file (buffer-file-name))
+           (app-root (when current-file 
+                      (my/tbricks-find-app-root current-file))))
+      (if app-root
+          (let ((default-directory app-root))
+            (message "Creating compilation database in %s..." app-root)
+            (async-shell-command "make db.create")
+            (set-process-sentinel 
+             (get-buffer-process "*Async Shell Command*")
+             (lambda (process event)
+               (when (string= event "finished\n")
+                 (message "Compilation database created, restarting LSP...")
+                 (sleep-for 1)
+                 (lsp-workspace-restart)))))
+        (message "Could not find Tbricks app root directory!"))))
+  
+    ;; Custom function to find corresponding test files
+  (defun my/projectile-test-file-p (file)
+    "Check if FILE is a test file in Tbricks structure."
+    (string-match-p "/tests/" file))
+  
+  (defun my/projectile-test-with-prefix (file)
+    "Find test file for FILE in Tbricks structure."
+    (let* ((project-root (projectile-project-root))
+           (relative-path (file-relative-name file project-root))
+           (test-path (replace-regexp-in-string
+                      "^apps/\\(.*\\)$"
+                      "apps/tests/\\1"
+                      relative-path)))
+      (expand-file-name test-path project-root)))
+  
+  ;; Tell Projectile about our custom test setup
+  (setq projectile-test-files-suffixes nil)  ; Disable suffix-based detection
+  (setq projectile-test-prefix nil)          ; Disable prefix-based detection
+  (setq projectile-test-file-fn #'my/projectile-test-file-p)
+  
+  (add-to-list 'projectile-project-types
+               '(cpp-compile-commands
+                 :compile "make -j5"
+                 :test "make -j5 test"
+                 :run "make -j5 install SYSTEM=jmm"
+                 :test-file-fn my/projectile-test-with-prefix))
+  
+  (setq projectile-project-root-files-functions
+        '(projectile-root-top-down))
+
+    ;; Add a keybinding for database creation
+  :bind (:map projectile-command-map
+              ("D" . my/projectile-create-compilation-database))
   
   :bind-keymap
   ("C-c p" . projectile-command-map))
