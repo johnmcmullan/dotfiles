@@ -22,6 +22,13 @@ fi
 #export https_proxy=$HTTPS_PROXY
 #export CA_CERT_FILE=/etc/pki/ca-bundle.crt
 
+# timestamps for Bash history
+export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S "
+export HISTSIZE=100000
+export HISTFILESIZE=${HISTSIZE}
+export HISTCONTROL=ignoredups:erasedups
+shopt -s histappend
+
 alias em='emacsclient -nw'
 # https://www.atlassian.com/git/tutorials/dotfiles
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
