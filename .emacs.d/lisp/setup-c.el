@@ -111,10 +111,10 @@
   :mode ("CMakeLists\\.txt\\'" "\\.cmake\\'"))
 
 ;; C++ code formatting
-(setq clang-format-style-option "file")
-(add-hook 'c++-mode-hook
-          (lambda ()
-            (add-hook 'before-save-hook 'clang-format-buffer nil t)))
+;(setq clang-format-style-option "file")
+;(add-hook 'c++-mode-hook
+;          (lambda ()
+;            (add-hook 'before-save-hook 'clang-format-buffer nil t)))
 
 (defun tbricks-apps-test-path (file-dir file-name)
   "Change a Tbricks apps path to its tests path and add the .profdata file."
