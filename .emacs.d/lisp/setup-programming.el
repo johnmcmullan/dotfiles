@@ -143,7 +143,7 @@
                     :server-id 'clangd-remote))
   :custom
   (lsp-idle-delay 0.1)
-  (lsp-clients-clangd-command "/usr/bin/clangd")
+  (lsp-clients-clangd-command "/opt/llvm-10/bin/clangd")
   (lsp-clients-clangd-args
    (list "-j=4" "--clang-tidy" "--header-insertion-decorators=0" "--completion-style=detailed" "--header-insertion=never" "--log=verbose"))
   (lsp-prefer-flymake nil)
