@@ -10,7 +10,7 @@ fi
 LS_COLORS='di=1;37'
 export LS_COLORS
 
-export LD_LIBRARY_PATH=$LLVM/lib64:$GCC_SUITE/lib64
+#export LD_LIBRARY_PATH=$LLVM/lib64:$GCC_SUITE/lib64
 
 tempo_log "login"
 

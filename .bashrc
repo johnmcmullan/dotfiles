@@ -22,6 +22,13 @@ fi
 #export https_proxy=$HTTPS_PROXY
 #export CA_CERT_FILE=/etc/pki/ca-bundle.crt
 
+#export WWW_HOME=http://www.ms.orcsoftware.com/proxy_index/
+#export https_proxy=http://prxlon.ms.orcsoftware.com:3128/
+#export http_proxy=http://prxlon.ms.orcsoftware.com:3128/
+#export no_proxy=dep01.ms.orcsoftware.com
+#export HTTP_PROXY=$http_proxy
+#export HTTPS_PROXY=$https_proxy
+
 # timestamps for Bash history
 export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S "
 export HISTSIZE=100000
