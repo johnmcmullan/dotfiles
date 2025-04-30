@@ -147,8 +147,10 @@
                  :run "make -j5 install SYSTEM=jmm"
                  :test-file-fn my/projectile-test-with-prefix))
   
-  (setq projectile-project-root-files-functions
-        '(projectile-root-top-down))
+(setq projectile-project-root-files-functions
+      '(projectile-root-top-down
+        projectile-root-bottom-up
+        projectile-root-local))
 
     ;; Add a keybinding for database creation
   :bind (:map projectile-command-map
