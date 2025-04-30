@@ -96,38 +96,6 @@
   (setq avy-highlight-first t)
   (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?q ?w ?e ?r ?u ?i ?o ?p)))
 
-(use-package dashboard
-  :ensure t
-  :config
-  (dashboard-setup-startup-hook)
-  :custom
-  (dashboard-startup-banner 'official)
-  (dashboard-items '((recents . 10)
-                    (projects . 5)
-                    (bookmarks . 5)))
-  (dashboard-set-heading-icons t)
-  (dashboard-set-file-icons t)
-  ;; Show in terminal even when started with emacsclient
-  (dashboard-set-init-info t)
-  (initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))))
-
-;(use-package flycheck
-;  :ensure t
-;  :defer t
-;  :diminish
-;  :custom
-;  (flycheck-display-errors-delay .3)
-;  (flycheck-idle-change-delay 2.0)
-;  :config
-;  (progn
-;    ;; Settings
-;    (setq-default flycheck-emacs-lisp-initialize-packages t
-;                  flycheck-highlighting-mode 'symbols
-;                  flycheck-check-syntax-automatically '(save idle-change)))
-;  :bind
-;  ("M-n" . flycheck-next-error)
-;  ("M-p" . flycheck-previous-error))
-
 (use-package lsp-mode
   :ensure t
   :hook
@@ -135,6 +103,10 @@
   (python-mode . lsp-deferred)
   (ruby-mode . lsp-deferred)
   :config
+  (lsp-register-custom-settings
+   '(("pylsp.plugins.pyls_mypy.enabled" t t)
+     ("pylsp.plugins.pyls_black.enabled" t t)
+     ("pylsp.plugins.pyls_isort.enabled" t t)))
   (lsp-register-client
    (make-lsp-client :new-connection (lsp-tramp-connection "/opt/llvm-10/bin/clangd")
                     :major-modes '(c-mode c++-mode)
@@ -194,10 +166,10 @@
 (use-package copilot
   :ensure t
   :init
-;  (setq copilot-node-executable "node") ; Ensure this points to your Node.js executable
+  (setq copilot-node-executable "node") ; Ensure this points to your Node.js executable
   :hook (prog-mode . copilot-mode)      ; Enable copilot in programming modes
   :config
-  ;; Override the default key bindings completely
+ ;; Override the default key bindings completely
   (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
   (define-key copilot-completion-map (kbd "C-TAB") 'copilot-accept-completion-by-word)
@@ -207,15 +179,17 @@
   (global-set-key (kbd "C-c c") 'copilot-complete)
   (global-set-key (kbd "C-c a") 'copilot-accept-completion))
 
-(use-package ellama
-  :config
-  (require 'llm-ollama)
-  (setq ellama-provider
-		'(make-llm-ollama
-		  :host "10.73.111.146"
-		  :port 11434
-		  :chat-model "qwen2.5-coder:14b"
-		  :embedding-model "nomic-embed-text")))
+;(use-package ellama
+; :config
+;  (require 'llm-ollama)
+;  (setq ellama-provider
+;		'(make-llm-ollama
+;		  :host "10.73.111.214"
+;		  :port 11434
+;		  :chat-model "tbqwen:latest"
+;		  :embedding-model "nomic-embed-text")
+;        )
+;)
 
 ;; GIT
 (use-package magit
