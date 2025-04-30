@@ -249,10 +249,6 @@ if [ -f ${ADMIN_ROOT}/etc/bash/.tbricks_completion.bash ] ; then
     source $ADMIN_ROOT/etc/bash/.tbricks_completion.bash
 fi
 
-if [ -f ~/.iterm2_shell_integration.bash ] ; then
-    source ~/.iterm2_shell_integration.bash
-fi
-
 export TB_APPS=$HOME/work/apps
 export MK_SRCROOT=$HOME/work/apps
 export MAKE=gmake
