@@ -4,6 +4,7 @@
 ;;; Code:
 
 (setq visible-bell t)
+(setq electric-indent-mode -1)
 
 ;; Enable mouse support
 (unless window-system
