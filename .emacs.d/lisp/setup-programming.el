@@ -167,6 +167,8 @@
   :ensure t
   :init
   (setq copilot-node-executable "node") ; Ensure this points to your Node.js executable
+  (setq copilot-max-char -1)
+  (setq copilot-indent-offset-warning-disable t)
   :hook (prog-mode . copilot-mode)      ; Enable copilot in programming modes
   :config
  ;; Override the default key bindings completely
