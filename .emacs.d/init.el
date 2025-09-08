@@ -22,6 +22,21 @@
 (unless package-archive-contents
   (package-refresh-contents))
 
+;; Function to check if node version meets requirements
+(defun node-version-meets-requirement-p ()
+    "Check if node version is >= 20.1."
+    (when (executable-find "node")
+      (let* ((node-version-string
+              (with-temp-buffer
+                (call-process "node" nil t nil "--version")
+                (buffer-string)))
+             (version-match (string-match "v\\([0-9]+\\)\\.\\([0-9]+\\)" node-version-string)))
+        (when version-match
+          (let ((major (string-to-number (match-string 1 node-version-string)))
+                (minor (string-to-number (match-string 2 node-version-string))))
+            (or (> major 20)
+                (and (= major 20) (>= minor 1))))))))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -115,7 +115,7 @@
                     :server-id 'clangd-remote))
   :custom
   (lsp-idle-delay 0.1)
-  (lsp-clients-clangd-command "/usr/bin/clangd")
+  (lsp-clients-clangd-command "/opt/llvm-10/bin/clangd")
   (lsp-clients-clangd-args
    (list "-j=4" "--clang-tidy" "--header-insertion-decorators=0" "--completion-style=detailed" "--header-insertion=never" "--log=verbose"))
   (lsp-prefer-flymake nil)
@@ -163,23 +163,24 @@
   :ensure nil
   :defer t)
 
-(use-package copilot
-  :ensure t
-  :init
-  (setq copilot-node-executable "node") ; Ensure this points to your Node.js executable
-  (setq copilot-max-char -1)
-  (setq copilot-indent-offset-warning-disable t)
-  :hook (prog-mode . copilot-mode)      ; Enable copilot in programming modes
-  :config
- ;; Override the default key bindings completely
-  (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
-  (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
-  (define-key copilot-completion-map (kbd "C-TAB") 'copilot-accept-completion-by-word)
-  (define-key copilot-completion-map (kbd "C-<tab>") 'copilot-accept-completion-by-word)
+(if (node-version-meets-requirement-p)
+    (use-package copilot
+      :ensure t
+      :init
+      (setq copilot-node-executable "node") ; Ensure this points to your Node.js executable
+      (setq copilot-max-char -1)
+      (setq copilot-indent-offset-warning-disable t)
+      :hook (prog-mode . copilot-mode)      ; Enable copilot in programming modes
+      :config
+      ;; Override the default key bindings completely
+      (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+      (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
+      (define-key copilot-completion-map (kbd "C-TAB") 'copilot-accept-completion-by-word)
+      (define-key copilot-completion-map (kbd "C-<tab>") 'copilot-accept-completion-by-word)
   
-  ;; Global bindings for invoking Copilot
-  (global-set-key (kbd "C-c c") 'copilot-complete)
-  (global-set-key (kbd "C-c a") 'copilot-accept-completion))
+      ;; Global bindings for invoking Copilot
+      (global-set-key (kbd "C-c c") 'copilot-complete)
+      (global-set-key (kbd "C-c a") 'copilot-accept-completion)))
 
 ;(use-package ellama
 ; :config
