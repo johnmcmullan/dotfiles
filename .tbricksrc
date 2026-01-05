@@ -4,11 +4,11 @@ function prompt()
 {
     git status > /dev/null 2>&1
     if [ $? -eq 0 ] ; then
-	BRANCH=`git rev-parse --abbrev-ref HEAD`
-	BRANCH_BASENAME=`basename $BRANCH`
-	echo -e '\033]2;'${BRANCH}'\007'
+	    BRANCH=`git rev-parse --abbrev-ref HEAD`
+	    BRANCH_BASENAME=`basename $BRANCH`
+	    echo -e '\033]2;'${BRANCH}'\007'
     else
-	printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"
+	    printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"
     fi
 }
 
@@ -177,6 +177,10 @@ function recompute_path()
     if [ -d ${ADMIN_ROOT} ] ; then
         PATH+=${ADMIN_ROOT}/bin:
     fi
+
+    if [ -d ${HOME}/.iterm2 ] ; then
+        PATH+=${HOME}/.iterm2:
+    fi
     if [ -d /opt/maven ] ; then
         PATH+=/opt/maven/bin:
     fi
@@ -222,8 +226,7 @@ export TBRICKS_ROOT=$TBRICKS
 export ADMIN_ROOT="$TBRICKS/admin"
 
 # for installing apps on remote systems in the same admin centre
-# TBRICKS_ADMIN_CENTER="remote_admin_sys" /opt/tbricks/sdk/bin/tbplugin import -sf $META_FOLDER other_sys tbricks
-# TBRICKS_ADMIN_CENTER="remote_admin_sys" /opt/tbricks/sdk/bin/tbplugin reload  $APP_BINARY other_sys $VERSION
+# TBRICKS_ADMIN_CENTER="remote_admin_sys" gmake install
 
 LOCAL_TBSH=$HOME/.local_tbsh
 if [ -f $LOCAL_TBSH ] ; then

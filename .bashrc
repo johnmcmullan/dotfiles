@@ -5,6 +5,7 @@ if [ -f /etc/bashrc ] ; then
     . /etc/bashrc
 fi
 
+# Tbricks specific functions and setup
 if [ -f .tbricksrc ] ; then
     . .tbricksrc
 fi
@@ -14,6 +15,10 @@ fi
 
 if [ -f ~/.git-completion.bash ] ; then
     source ~/.git-completion.bash
+fi
+
+if [ -x ~/.iterm2_shell_integration.bash ] ; then
+	source ~/.iterm2_shell_integration.bash
 fi
 
 #export HTTP_PROXY=http://proxy.orcsoftware.com:3128

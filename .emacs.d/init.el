@@ -22,6 +22,21 @@
 (unless package-archive-contents
   (package-refresh-contents))
 
+;; Function to check if node version meets requirements
+(defun node-version-meets-requirement-p ()
+    "Check if node version is >= 20.1."
+    (when (executable-find "node")
+      (let* ((node-version-string
+              (with-temp-buffer
+                (call-process "node" nil t nil "--version")
+                (buffer-string)))
+             (version-match (string-match "v\\([0-9]+\\)\\.\\([0-9]+\\)" node-version-string)))
+        (when version-match
+          (let ((major (string-to-number (match-string 1 node-version-string)))
+                (minor (string-to-number (match-string 2 node-version-string))))
+            (or (> major 20)
+                (and (= major 20) (>= minor 1))))))))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -34,9 +49,24 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("09b833239444ac3230f591e35e3c28a4d78f1556b107bafe0eb32b5977204d93" "9fb561389e5ac5b9ead13a24fb4c2a3544910f67f12cfcfe77b75f36248017d0" "2dc03dfb67fbcb7d9c487522c29b7582da20766c9998aaad5e5b63b5c27eec3f" "dea4b7d43d646aa06a4f705a58f874ec706f896c25993fcf73de406e27dc65ba" "3b8284e207ff93dfc5e5ada8b7b00a3305351a3fb222782d8033a400a48eca48" "e6df46d5085fde0ad56a46ef69ebb388193080cc9819e2d6024c9c6e27388ba9" "9d91458c4ad7c74cf946bd97ad085c0f6a40c370ac0a1cbeb2e3879f15b40553" "f2c35f8562f6a1e5b3f4c543d5ff8f24100fae1da29aeb1864bbc17758f52b70" default))
+   '("09b833239444ac3230f591e35e3c28a4d78f1556b107bafe0eb32b5977204d93"
+     "9fb561389e5ac5b9ead13a24fb4c2a3544910f67f12cfcfe77b75f36248017d0"
+     "2dc03dfb67fbcb7d9c487522c29b7582da20766c9998aaad5e5b63b5c27eec3f"
+     "dea4b7d43d646aa06a4f705a58f874ec706f896c25993fcf73de406e27dc65ba"
+     "3b8284e207ff93dfc5e5ada8b7b00a3305351a3fb222782d8033a400a48eca48"
+     "e6df46d5085fde0ad56a46ef69ebb388193080cc9819e2d6024c9c6e27388ba9"
+     "9d91458c4ad7c74cf946bd97ad085c0f6a40c370ac0a1cbeb2e3879f15b40553"
+     "f2c35f8562f6a1e5b3f4c543d5ff8f24100fae1da29aeb1864bbc17758f52b70"
+     default))
  '(package-selected-packages
-   '(counsel dashboard copilot cape exec-path-from-shell json-rpc editorconfig auctex ansible clipetty coverlay coverage doom-modeline use-package flatbuffers-mode lsp-sonarlint cov git-lens lsp-java pbcopy robe projectile which-key company-prescient yasnippet-snippets modern-cpp-font-lock yasnippet lsp-mode lsp-treemacs lsp-ui zenburn-theme ccls magit-todos magit clang-format hl-todo pyvenv ws-butler docbook))
+   '(ansible auctex cape ccls clang-format clipetty company-prescient
+             copilot copilot-chat counsel cov coverage coverlay
+             docbook doom-modeline editorconfig exec-path-from-shell
+             flatbuffers-mode git-lens hl-todo json-rpc lsp-java
+             lsp-mode lsp-sonarlint lsp-treemacs lsp-ui magit
+             magit-todos modern-cpp-font-lock pbcopy projectile pyvenv
+             robe use-package which-key ws-butler yasnippet
+             yasnippet-snippets zenburn-theme))
  '(warning-suppress-types '((emacs) (lsp-mode))))
 
 (package-install-selected-packages)
