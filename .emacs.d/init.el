@@ -22,6 +22,10 @@
 (unless package-archive-contents
   (package-refresh-contents))
 
+;; Detect if this is a work machine
+(defvar my/work-machine-p (file-directory-p "/opt/tbricks")
+  "Non-nil if this is a work machine with Tbricks installed.")
+
 ;; Function to check if node version meets requirements
 (defun node-version-meets-requirement-p ()
     "Check if node version is >= 20.1."
@@ -49,7 +53,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("09b833239444ac3230f591e35e3c28a4d78f1556b107bafe0eb32b5977204d93"
+   '("972f792651d32b0506481b9e87b2fbc9b732ae9da2527562668c6e7d149fefda"
+     "09b833239444ac3230f591e35e3c28a4d78f1556b107bafe0eb32b5977204d93"
      "9fb561389e5ac5b9ead13a24fb4c2a3544910f67f12cfcfe77b75f36248017d0"
      "2dc03dfb67fbcb7d9c487522c29b7582da20766c9998aaad5e5b63b5c27eec3f"
      "dea4b7d43d646aa06a4f705a58f874ec706f896c25993fcf73de406e27dc65ba"
@@ -59,17 +64,21 @@
      "f2c35f8562f6a1e5b3f4c543d5ff8f24100fae1da29aeb1864bbc17758f52b70"
      default))
  '(package-selected-packages
-   '(ansible auctex cape ccls clang-format clipetty company-prescient
-             copilot copilot-chat counsel cov coverage coverlay
-             docbook doom-modeline editorconfig exec-path-from-shell
-             flatbuffers-mode git-lens hl-todo json-rpc lsp-java
-             lsp-mode lsp-sonarlint lsp-treemacs lsp-ui magit
-             magit-todos modern-cpp-font-lock pbcopy projectile pyvenv
-             robe use-package which-key ws-butler yasnippet
-             yasnippet-snippets zenburn-theme))
+   '(auctex cape ccls clang-format clipetty company-prescient counsel
+            docbook doom-modeline editorconfig exec-path-from-shell
+            flatbuffers-mode git-lens hl-todo json-rpc lsp-mode
+            lsp-treemacs lsp-ui magit magit-todos modern-cpp-font-lock
+            pbcopy projectile pyvenv robe use-package which-key
+            ws-butler yasnippet yasnippet-snippets zenburn-theme))
  '(warning-suppress-types '((emacs) (lsp-mode))))
 
 (package-install-selected-packages)
+
+;; Work-specific packages - only install on work machines
+(when my/work-machine-p
+  (dolist (pkg '(ansible copilot copilot-chat cov coverage coverlay lsp-java lsp-sonarlint))
+    (unless (package-installed-p pkg)
+      (package-install pkg))))
 
 (require 'setup-general)
 (require 'setup-editing)

@@ -163,24 +163,24 @@
   :ensure nil
   :defer t)
 
-(if (node-version-meets-requirement-p)
-    (use-package copilot
-      :ensure t
-      :init
-      (setq copilot-node-executable "node") ; Ensure this points to your Node.js executable
-      (setq copilot-max-char -1)
-      (setq copilot-indent-offset-warning-disable t)
-      :hook (prog-mode . copilot-mode)      ; Enable copilot in programming modes
-      :config
-      ;; Override the default key bindings completely
-      (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
-      (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
-      (define-key copilot-completion-map (kbd "C-TAB") 'copilot-accept-completion-by-word)
-      (define-key copilot-completion-map (kbd "C-<tab>") 'copilot-accept-completion-by-word)
-  
-      ;; Global bindings for invoking Copilot
-      (global-set-key (kbd "C-c c") 'copilot-complete)
-      (global-set-key (kbd "C-c a") 'copilot-accept-completion)))
+(when (and my/work-machine-p (node-version-meets-requirement-p))
+  (use-package copilot
+    :ensure t
+    :init
+    (setq copilot-node-executable "node") ; Ensure this points to your Node.js executable
+    (setq copilot-max-char -1)
+    (setq copilot-indent-offset-warning-disable t)
+    :hook (prog-mode . copilot-mode)      ; Enable copilot in programming modes
+    :config
+    ;; Override the default key bindings completely
+    (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+    (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
+    (define-key copilot-completion-map (kbd "C-TAB") 'copilot-accept-completion-by-word)
+    (define-key copilot-completion-map (kbd "C-<tab>") 'copilot-accept-completion-by-word)
+
+    ;; Global bindings for invoking Copilot
+    (global-set-key (kbd "C-c c") 'copilot-complete)
+    (global-set-key (kbd "C-c a") 'copilot-accept-completion)))
 
 ;(use-package ellama
 ; :config

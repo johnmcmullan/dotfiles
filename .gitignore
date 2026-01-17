@@ -4,3 +4,4 @@ emea
 compile_commands.json
 .DS_Store
 .profdata
+.cfg
