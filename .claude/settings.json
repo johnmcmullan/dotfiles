@@ -1,0 +1,10 @@
+{
+  "model": "sonnet",
+  "permissions": {
+    "allow": [
+      "Bash(*:*)",
+      "WebSearch",
+      "WebFetch"
+    ]
+  }
+}
