@@ -78,6 +78,9 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
+# ripgrep with smart case
+alias rg='rg --smart-case'
+
 umask 007
 
 # Set default PATH only if not at work (tbricksrc sets PATH)
