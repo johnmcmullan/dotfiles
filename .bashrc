@@ -18,6 +18,11 @@ if [ -f ~/.git-completion.bash ] ; then
     source ~/.git-completion.bash
 fi
 
+# Source custom functions
+if [ -f ~/.bash_functions ] ; then
+    source ~/.bash_functions
+fi
+
 
 #export HTTP_PROXY=http://proxy.orcsoftware.com:3128
 #export HTTPS_PROXY=http://proxy.orcsoftware.com:3128
