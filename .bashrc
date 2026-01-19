@@ -1,30 +1,24 @@
 # .bashrc
 
 # Source global definitions
-if [ -f /etc/bashrc ] ; then
-    . /etc/bashrc
-fi
+[ -f /etc/bashrc ] && source /etc/bashrc
 
 # Tbricks specific functions and setup
-if [ -f .tbricksrc ] ; then
-    . .tbricksrc
-    HAVE_TBRICKS=1
-fi
+[ -f .tbricksrc ] && source .tbricksrc
 
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
 
-if [ -f ~/.git-completion.bash ] ; then
-    source ~/.git-completion.bash
-fi
+[ -f ~/.git-completion.bash ] && source ~/.git-completion.bash
 
-
+# old proxy settings
 #export HTTP_PROXY=http://proxy.orcsoftware.com:3128
 #export HTTPS_PROXY=http://proxy.orcsoftware.com:3128
 #export http_proxy=$HTTP_PROXY
 #export https_proxy=$HTTPS_PROXY
 #export CA_CERT_FILE=/etc/pki/ca-bundle.crt
 
+# MS proxy settings
 #export WWW_HOME=http://www.ms.orcsoftware.com/proxy_index/
 #export https_proxy=http://prxlon.ms.orcsoftware.com:3128/
 #export http_proxy=http://prxlon.ms.orcsoftware.com:3128/
@@ -53,15 +47,15 @@ shopt -s dirspell       # Autocorrect directory names in completion
 shopt -s nocaseglob     # Case-insensitive globbing
 
 # Better completion
-if [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-fi
+[ -f /etc/bash_completion ] && source /etc/bash_completion
 bind 'set completion-ignore-case on' 2>/dev/null
 bind 'set show-all-if-ambiguous on' 2>/dev/null
 
 alias em='emacsclient -nw'
 # https://www.atlassian.com/git/tutorials/dotfiles
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+
+# Calculator with math library
 alias bc='bc -l'
 
 # Better ls aliases
@@ -84,7 +78,7 @@ alias rg='rg --smart-case'
 umask 007
 
 # Set default PATH only if not at work (tbricksrc sets PATH)
-if [ -z "$HAVE_TBRICKS" ] ; then
+if [ -z "$TB_APPS" ] ; then
     PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:$HOME/bin:$HOME/.local/bin
     export PATH
 fi
@@ -107,6 +101,31 @@ extract() {
     fi
 }
 
+recompute_bin() {
+    local bin_dir="$HOME/bin"
+    local copilot_dir="$HOME/copilot_projects"
+    
+    mkdir -p "$bin_dir"
+    
+    echo "Creating symlinks for executables in $copilot_dir..."
+    
+    find -L "$copilot_dir" -type f -executable 2>/dev/null | while read -r file; do
+        local name=$(basename "$file")
+        local link="$bin_dir/$name"
+        
+        # Skip if already correctly linked
+        [[ -L "$link" ]] && [[ "$(readlink "$link")" == "$file" ]] && continue
+        
+        # Skip if real file exists (not a symlink)
+        [[ -e "$link" ]] && [[ ! -L "$link" ]] && continue
+        
+        # Create/update symlink
+        ln -sf "$file" "$link" && echo "  $name"
+    done
+    
+    echo "Done."
+}
+
 # bun
 BUN_INSTALL="$HOME/.bun"
 if [ -d "$BUN_INSTALL" ] ; then
@@ -114,13 +133,13 @@ if [ -d "$BUN_INSTALL" ] ; then
 	export PATH="$BUN_INSTALL/bin:$PATH"
 fi
 
+# fzf integration (fuzzy finder for history/files)
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+# local access tokens
+[ -f .access_tokens ] && source .access_tokens
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
-# opencode
-export PATH=/home/john/.opencode/bin:$PATH
-
-# fzf integration (fuzzy finder for history/files)
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
