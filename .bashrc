@@ -107,8 +107,6 @@ recompute_bin() {
     
     mkdir -p "$bin_dir"
     
-    echo "Creating symlinks for executables in $copilot_dir..."
-    
     find -L "$copilot_dir" -type f -executable 2>/dev/null | while read -r file; do
         local name=$(basename "$file")
         local link="$bin_dir/$name"
@@ -120,10 +118,8 @@ recompute_bin() {
         [[ -e "$link" ]] && [[ ! -L "$link" ]] && continue
         
         # Create/update symlink
-        ln -sf "$file" "$link" && echo "  $name"
+        ln -sf "$file" "$link"
     done
-    
-    echo "Done."
 }
 
 # bun
