@@ -1,4 +1,4 @@
-# Global Instructions for Claude Code
+# Global Instructions for Claude Code & Copilot CLI
 
 ## Workspace Management
 Check ~/Claude for existing project directories. Scan 2-3 recent files in each 
