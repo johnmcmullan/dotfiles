@@ -135,7 +135,13 @@ fi
 # local access tokens
 [ -f .access_tokens ] && source .access_tokens
 
+function open() {
+  printf '\e]8;;%s\a%s\e]8;;\a\n' "$1" "${2:-$1}"
+}
+
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
+
+export JIRA_NO_NOTIFY=1
