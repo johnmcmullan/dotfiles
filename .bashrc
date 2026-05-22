@@ -129,6 +129,10 @@ if [ -d "$BUN_INSTALL" ] ; then
 	export PATH="$BUN_INSTALL/bin:$PATH"
 fi
 
+# terminal disambiguation
+alias ws2='echo -ne "\033]11;#0D1B2E\007"'
+alias ws1='echo -ne "\033]11;#292c33\007"'
+
 # fzf integration (fuzzy finder for history/files)
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
@@ -139,3 +143,7 @@ fi
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
+. "$HOME/.cargo/env"
+
+# Confluence token — default to itiviti instance (override for Broadridge)
+export CONFLUENCE_ACCESS_TOKEN=$CONFLUENCE_ITIVITI_TOKEN
