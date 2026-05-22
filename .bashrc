@@ -9,6 +9,11 @@
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
 
+# Source custom functions
+if [ -f ~/.bash_functions ] ; then
+    source ~/.bash_functions
+fi
+
 [ -f ~/.git-completion.bash ] && source ~/.git-completion.bash
 
 # old proxy settings
