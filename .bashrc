@@ -152,7 +152,8 @@ function open() {
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
-. "$HOME/.cargo/env"
+
+[ -f "$HOME/.cargo/env" && . "$HOME/.cargo/env" ]
 
 # Confluence token — default to itiviti instance (override for Broadridge)
 export CONFLUENCE_ACCESS_TOKEN=$CONFLUENCE_ITIVITI_TOKEN
