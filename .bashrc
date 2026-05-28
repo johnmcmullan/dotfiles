@@ -150,3 +150,8 @@ export SDKMAN_DIR="$HOME/.sdkman"
 
 
 export JIRA_NO_NOTIFY=1
+
+# >>> grok installer >>>
+export PATH="$HOME/.grok/bin:$PATH"
+[[ -r "$HOME/.grok/completions/bash/grok.bash" ]] && source "$HOME/.grok/completions/bash/grok.bash"
+# <<< grok installer <<<
