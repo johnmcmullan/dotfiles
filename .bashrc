@@ -9,6 +9,11 @@
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
 
+# Source custom functions
+if [ -f ~/.bash_functions ] ; then
+    source ~/.bash_functions
+fi
+
 [ -f ~/.git-completion.bash ] && source ~/.git-completion.bash
 
 # old proxy settings
@@ -139,6 +144,10 @@ alias ws1='echo -ne "\033]11;#292c33\007"'
 # local access tokens
 [ -f .access_tokens ] && source .access_tokens
 
+function open() {
+  printf '\e]8;;%s\a%s\e]8;;\a\n' "$1" "${2:-$1}"
+}
+
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
@@ -147,3 +156,4 @@ export SDKMAN_DIR="$HOME/.sdkman"
 
 # Confluence token — default to itiviti instance (override for Broadridge)
 export CONFLUENCE_ACCESS_TOKEN=$CONFLUENCE_ITIVITI_TOKEN
+export JIRA_NO_NOTIFY=1
